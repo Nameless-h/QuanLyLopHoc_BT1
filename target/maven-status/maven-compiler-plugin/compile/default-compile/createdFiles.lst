@@ -1,2 +1,7 @@
+DAO\PersonDAO.class
+GUI\MainForm$1.class
+GUI\MainForm.class
+BUS\PersonBUS.class
+com\mycompany\quanlylophoc\MainFrame.class
 com\mycompany\quanlylophoc\QuanLyLopHoc.class
-GUI\test.class
+DTO\PersonDTO.class

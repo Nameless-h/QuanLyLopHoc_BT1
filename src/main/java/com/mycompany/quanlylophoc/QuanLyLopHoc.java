@@ -4,6 +4,8 @@
 
 package com.mycompany.quanlylophoc;
 
+import GUI.MainForm;
+
 
 /**
  *
@@ -13,7 +15,7 @@ public class QuanLyLopHoc {
 
     public static void main(String[] args) {
         
-        System.out.println("Hello World!");
-        
+//        System.out.println("Hello World!");
+        MainForm m = new MainForm();
     }
 }
