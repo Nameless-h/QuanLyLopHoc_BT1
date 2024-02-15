@@ -9,8 +9,15 @@ package DTO;
  * @author Vi Hao
  */
 public class CourseInstructorDTO {
+
     private int courseID;
     private int personID;
+
+    public CourseInstructorDTO() {
+
+        this.courseID = 0;
+        this.personID = 0;
+    }
 
     public CourseInstructorDTO(int courseID, int personID) {
         this.courseID = courseID;
@@ -32,5 +39,5 @@ public class CourseInstructorDTO {
     public void setPersonID(int personID) {
         this.personID = personID;
     }
-    
+
 }

@@ -9,10 +9,18 @@ package DTO;
  * @author Vi Hao
  */
 public class OnsiteCourseDTO {
-    private int courseID ;
+
+    private int courseID;
     private String location;
     private String days;
     private String course_time;
+
+    public OnsiteCourseDTO() {
+        this.courseID = 0;
+        this.location = "";
+        this.days = "";
+        this.course_time = "";
+    }
 
     public OnsiteCourseDTO(int courseID, String location, String days, String course_time) {
         this.courseID = courseID;
@@ -52,6 +60,5 @@ public class OnsiteCourseDTO {
     public void setCourse_time(String course_time) {
         this.course_time = course_time;
     }
-    
-    
+
 }

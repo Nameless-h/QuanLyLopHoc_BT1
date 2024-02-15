@@ -9,9 +9,16 @@ package DTO;
  * @author Vi Hao
  */
 public class OfficeAssignmentDTO {
-    private int instructorID ;
+
+    private int instructorID;
     private String location;
     private String time_stamp;
+
+    public OfficeAssignmentDTO() {
+        this.instructorID = 0;
+        this.location = "";
+        this.time_stamp = "";
+    }
 
     public OfficeAssignmentDTO(int instructorID, String location, String time_stamp) {
         this.instructorID = instructorID;
@@ -42,6 +49,5 @@ public class OfficeAssignmentDTO {
     public void setTime_stamp(String time_stamp) {
         this.time_stamp = time_stamp;
     }
-    
-    
+
 }

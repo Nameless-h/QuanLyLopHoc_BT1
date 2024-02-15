@@ -9,6 +9,7 @@ package DTO;
  * @author Vi Hao
  */
 public class PersonDTO {
+
     private int personID;
     private String lastName;
     private String firstName;
@@ -21,6 +22,14 @@ public class PersonDTO {
         this.firstName = firstName;
         this.hireDate = hireDate;
         this.enrollmentDate = enrollmentDate;
+    }
+
+    public Person() {
+        this.personID = 0;
+        this.lastName = "";
+        this.firstName = "";
+        this.hireDate = "";
+        this.enrollmentDate = "";
     }
 
     public int getPersonID() {
@@ -62,6 +71,5 @@ public class PersonDTO {
     public void setEnrollmentDate(String enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
     }
-    
-    
+
 }

@@ -12,6 +12,10 @@ public class OnlineCourseDTO {
     private int courseID ;
     private String url;
 
+    public OnlineCourseDTO(){
+        this.courseID = 0;
+        this.url = "";
+    }
     public OnlineCourseDTO(int courseID, String url) {
         this.courseID = courseID;
         this.url = url;

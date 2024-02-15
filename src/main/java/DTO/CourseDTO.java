@@ -9,10 +9,18 @@ package DTO;
  * @author Vi Hao
  */
 public class CourseDTO {
+
     private int courseID;
     private String title;
     private String credits;
     private int departmentID;
+
+    public CourseDTO() {
+        this.courseID = 0;
+        this.title = "";
+        this.credits = "";
+        this.departmentID = 0;
+    }
 
     public CourseDTO(int courseID, String title, String credits, int departmentID) {
         this.courseID = courseID;
@@ -52,6 +60,5 @@ public class CourseDTO {
     public void setDepartmentID(int departmentID) {
         this.departmentID = departmentID;
     }
-    
-    
+
 }
