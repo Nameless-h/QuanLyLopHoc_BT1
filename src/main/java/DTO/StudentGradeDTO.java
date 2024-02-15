@@ -13,7 +13,12 @@ public class StudentGradeDTO {
     private int courseID;
     private int studentID ;
     private float grade;
-
+public StudentGradeDTO() {
+         this.enrollmentID = 0;
+         this.courseID = 0;
+         this.studentID = 0;
+         this.grade = 0.0f;
+    }
     public StudentGradeDTO(int enrollmentID, int courseID, int studentID, float grade) {
         this.enrollmentID = enrollmentID;
         this.courseID = courseID;

@@ -9,18 +9,27 @@ package DTO;
  * @author Vi Hao
  */
 public class DepartmentDTO {
-     private int departmentID ;
+
+    private int departmentID;
     private String name;
     private float budget;
     private String startDate;
-    private int adminstrator;
+    private int administrator;
 
-    public DepartmentDTO(int departmentID, String name, float budget, String startDate, int adminstrator) {
+    public DepartmentDTO() {
+        this.departmentID = 0;
+        this.name = "";
+        this.budget = 0.0f;
+        this.startDate = "";
+        this.administrator=  0;
+    }
+
+    public DepartmentDTO(int departmentID, String name, float budget, String startDate, int administrator) {
         this.departmentID = departmentID;
         this.name = name;
         this.budget = budget;
         this.startDate = startDate;
-        this.adminstrator = adminstrator;
+        this.administrator = administrator;
     }
 
     public int getDepartmentID() {
@@ -56,12 +65,11 @@ public class DepartmentDTO {
     }
 
     public int getAdminstrator() {
-        return adminstrator;
+        return administrator;
     }
 
-    public void setAdminstrator(int adminstrator) {
-        this.adminstrator = adminstrator;
+    public void setAdminstrator(int administrator) {
+        this.administrator = administrator;
     }
-    
-    
+
 }
