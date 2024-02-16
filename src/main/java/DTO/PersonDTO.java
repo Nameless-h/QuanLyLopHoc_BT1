@@ -24,7 +24,7 @@ public class PersonDTO {
         this.enrollmentDate = enrollmentDate;
     }
 
-    public Person() {
+    public PersonDTO() {
         this.personID = 0;
         this.lastName = "";
         this.firstName = "";

@@ -16,13 +16,13 @@ import java.util.logging.Level;
  * @author JN_PC
  */
 public class CourseInstructorDAO {
-     private DBConnection db;
+    private DBConnection db;
 
-    public CourseInstructorDAO(){
+    public CourseInstructorDAO() {
         db = new DBConnection();
     }
-    
-    public ArrayList<CourseInstructorDTO> getAllCourseInstructor(){
+
+    public ArrayList<CourseInstructorDTO> getAllCourseInstructor() {
         ArrayList<CourseInstructorDTO> listTmp = new ArrayList<CourseInstructorDTO>();
         String sql = "SELECT * FROM courseinstructor";
         try {
@@ -43,4 +43,31 @@ public class CourseInstructorDAO {
         return listTmp;
     }
 
+    public boolean Add(CourseInstructorDTO c) {
+        try {
+            String sql = "INSERT INTO courseinstructor(courseID,personID) VALUES (" + c.getCourseID() + ","
+                    + c.getPersonID() + ")";
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: CourseInstructorDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean Delete(CourseInstructorDTO c) {
+        try {
+            String sql = "DELETE FROM courseinstructor WHERE courseID = " + c.getCourseID() + " AND personID = "
+                    + c.getPersonID();
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: CourseInstructorDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
 }
