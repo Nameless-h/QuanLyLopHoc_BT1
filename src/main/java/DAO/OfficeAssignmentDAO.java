@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import DTO.CourseDTO;
 import DTO.DepartmentDTO;
 import DTO.OfficeAssignmentDTO;
 import Database.DBConnection;
@@ -17,13 +18,13 @@ import java.util.logging.Level;
  * @author JN_PC
  */
 public class OfficeAssignmentDAO {
-     private DBConnection db;
+    private DBConnection db;
 
-    public OfficeAssignmentDAO(){
+    public OfficeAssignmentDAO() {
         db = new DBConnection();
     }
-    
-    public ArrayList<OfficeAssignmentDTO> getAllOfficeAssignment(){
+
+    public ArrayList<OfficeAssignmentDTO> getAllOfficeAssignment() {
         ArrayList<OfficeAssignmentDTO> listTmp = new ArrayList<OfficeAssignmentDTO>();
         String sql = "SELECT * FROM officeassignment";
         try {
@@ -43,5 +44,36 @@ public class OfficeAssignmentDAO {
             CustomLogger.CustomLogger(OfficeAssignmentDAO.class.getName(), ex.getMessage(), Level.SEVERE);
         }
         return listTmp;
+    }
+
+    public boolean Add(OfficeAssignmentDTO o) {
+        try {
+            String sql = "INSERT INTO officeassignment(location,time_stamp) VALUES ('";
+            sql += o.getLocation() + "',";
+            sql += o.getTime_stamp() + ")";
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: OfficeAssignmentDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean Set(OfficeAssignmentDTO o) {
+        try {
+            String sql = "UPDATE officeassignment SET ";
+            sql += "location = '" + o.getLocation() + "',";
+            sql += "time_stamp = " + o.getTime_stamp();
+            sql += " WHERE instructorID = " + o.getInstructorID();
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: OfficeAssignmentDAO.java");
+            System.out.println(e);
+            return false;
+        }
     }
 }

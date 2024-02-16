@@ -22,8 +22,8 @@ public class CourseDAO {
     public CourseDAO() {
         db = new DBConnection();
     }
-    
-    public ArrayList<CourseDTO> getAllCourse(){
+
+    public ArrayList<CourseDTO> getAllCourse() {
         ArrayList<CourseDTO> listTmp = new ArrayList<CourseDTO>();
         String sql = "SELECT * FROM course";
         try {
@@ -41,9 +41,42 @@ public class CourseDAO {
                 }
             }
         } catch (Exception ex) {
+            System.out.println("Error in file: CourseDAO.java");
             CustomLogger.CustomLogger(PersonDAO.class.getName(), ex.getMessage(), Level.SEVERE);
         }
         return listTmp;
     }
 
+    public boolean Add(CourseDTO c) {
+        try {
+            String sql = "INSERT INTO course(title,credits,departmentID) VALUES ('";
+            sql += c.getTitle() + "',";
+            sql += c.getCredits() + ",";
+            sql += c.getDepartmentID() + ")";
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: CourseDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean Set(CourseDTO c) {
+        try {
+            String sql = "UPDATE course SET ";
+            sql += "title = '" + c.getTitle() + "',";
+            sql += "credits = " + c.getCredits() + ",";
+            sql += "departmentID = " + c.getDepartmentID();
+            sql += " WHERE courseID = " + c.getCourseID();
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: CourseDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
 }

@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import DTO.CourseDTO;
 import DTO.OnlineCourseDTO;
 import DTO.OnsiteCourseDTO;
 import Database.DBConnection;
@@ -19,11 +20,11 @@ import java.util.logging.Level;
 public class OnsiteCourseDAO {
     private DBConnection db;
 
-    public OnsiteCourseDAO(){
+    public OnsiteCourseDAO() {
         db = new DBConnection();
     }
-    
-    public ArrayList<OnsiteCourseDTO> getAllOnsiteCourse(){
+
+    public ArrayList<OnsiteCourseDTO> getAllOnsiteCourse() {
         ArrayList<OnsiteCourseDTO> listTmp = new ArrayList<OnsiteCourseDTO>();
         String sql = "SELECT * FROM onsitecourse";
         try {
@@ -44,5 +45,39 @@ public class OnsiteCourseDAO {
             CustomLogger.CustomLogger(OnsiteCourseDAO.class.getName(), ex.getMessage(), Level.SEVERE);
         }
         return listTmp;
+    }
+
+    public boolean Add(OnsiteCourseDTO c) {
+        try {
+            String sql = "INSERT INTO onsitecourse(courseID,location,days,course_time) VALUES (";
+            sql += c.getCourseID() + ",'";
+            sql += c.getLocation() + "','";
+            sql += c.getDays() + "',";
+            sql += c.getCourse_time() + ")";
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: OnsiteCourseDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean Set(OnsiteCourseDTO c) {
+        try {
+            String sql = "UPDATE onsitecourse SET ";
+            sql += "location = '" + c.getLocation() + "',";
+            sql += "days = '" + c.getDays() + "'',";
+            sql += "course_time = " + c.getCourse_time();
+            sql += " WHERE courseID = " + c.getCourseID();
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: OnsiteCourseDAO.java");
+            System.out.println(e);
+            return false;
+        }
     }
 }

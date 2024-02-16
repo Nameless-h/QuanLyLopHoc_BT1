@@ -28,10 +28,9 @@ public class PersonDAO {
     public PersonDAO() {
         db = new DBConnection();
         list = getAllPerson();
- 
     }
-    
-    public ArrayList<PersonDTO> getAllPerson(){
+
+    public ArrayList<PersonDTO> getAllPerson() {
         ArrayList<PersonDTO> listTmp = new ArrayList<PersonDTO>();
         String sql = "SELECT * FROM person";
         try {
@@ -50,9 +49,44 @@ public class PersonDAO {
                 }
             }
         } catch (Exception ex) {
+            System.out.println("Error in file: PersonDAO.java");
             CustomLogger.CustomLogger(PersonDAO.class.getName(), ex.getMessage(), Level.SEVERE);
         }
         return listTmp;
     }
 
+    public boolean Add(PersonDTO ps) {
+        try {
+            String sql = "INSERT INTO person(firstName,lastName,enrollmentDate,hireDate) VALUES ('"
+                    + ps.getFirstName() + "','"
+                    + ps.getLastName() + "',"
+                    + ps.getEnrollmentDate() + ","
+                    + ps.getHireDate() + ")";
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: PersonDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean Set(PersonDTO ps) {
+        try {
+            String sql = "UPDATE person SET ";
+            sql += "firstName = '" + ps.getFirstName() + "',";
+            sql += "lastName = '" + ps.getLastName() + "',";
+            sql += "enrollmentDate = " + ps.getEnrollmentDate() + ",";
+            sql += "hireDate = " + ps.getHireDate();
+            sql += " WHERE personID = " + ps.getPersonID();
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: PersonDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
 }
