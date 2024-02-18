@@ -3,6 +3,7 @@ DAO\CourseInstructorDAO.class
 DAO\OnlineCourseDAO.class
 DTO\CourseDTO.class
 DAO\StudentGradeDAO.class
+GUI\MainForm$3.class
 BUS\DepartmentBUS.class
 GUI\MainForm.class
 com\mycompany\quanlylophoc\QuanLyLopHoc.class
@@ -16,7 +17,9 @@ DTO\OnlineCourseDTO.class
 BUS\CourseInstructorBUS.class
 DTO\OfficeAssignmentDTO.class
 BUS\CourseBUS.class
+GUI\MainForm$2.class
 DAO\CourseDAO.class
+GUI\MainForm$5.class
 BUS\OnlineCourseBUS.class
 BUS\StudentGradeBUS.class
 BUS\OfficeAssignmentBUS.class
@@ -26,5 +29,6 @@ BUS\PersonBUS.class
 Utility\CustomLogger.class
 DAO\DepartmentDAO.class
 DAO\OfficeAssignmentDAO.class
+GUI\MainForm$4.class
 DTO\CourseInstructorDTO.class
 com\mycompany\quanlylophoc\MainFrame.class
