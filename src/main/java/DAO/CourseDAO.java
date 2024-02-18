@@ -5,7 +5,6 @@
 package DAO;
 
 import DTO.CourseDTO;
-import DTO.PersonDTO;
 import Database.DBConnection;
 import Utility.CustomLogger;
 import java.sql.ResultSet;
@@ -28,17 +27,14 @@ public class CourseDAO {
         String sql = "SELECT * FROM course";
         try {
             ResultSet rs = db.executeQuery(sql);
-            if (rs.next()) {
-                rs.beforeFirst();
-                CourseDTO tmp;
-                while (rs.next()) {
-                    tmp = new CourseDTO();
-                    tmp.setCourseID(rs.getInt("courseID"));
-                    tmp.setCredits(rs.getString("credits"));
-                    tmp.setDepartmentID(rs.getInt("departmentID "));
-                    tmp.setTitle(rs.getString("title"));
-                    listTmp.add(tmp);
-                }
+            CourseDTO tmp;
+            while (rs.next()) {
+                tmp = new CourseDTO();
+                tmp.setCourseID(rs.getInt("courseID"));
+                tmp.setCredits(rs.getString("credits"));
+                tmp.setDepartmentID(rs.getInt("departmentID"));
+                tmp.setTitle(rs.getString("title"));
+                listTmp.add(tmp);
             }
         } catch (Exception ex) {
             System.out.println("Error in file: CourseDAO.java");

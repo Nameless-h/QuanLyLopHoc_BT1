@@ -27,8 +27,6 @@ public class CourseInstructorDAO {
         String sql = "SELECT * FROM courseinstructor";
         try {
             ResultSet rs = db.executeQuery(sql);
-            if (rs.next()) {
-                rs.beforeFirst();
                 CourseInstructorDTO tmp;
                 while (rs.next()) {
                     tmp = new CourseInstructorDTO();
@@ -36,7 +34,6 @@ public class CourseInstructorDAO {
                     tmp.setCourseID(rs.getInt("courseID"));
                     listTmp.add(tmp);
                 }
-            }
         } catch (Exception ex) {
             CustomLogger.CustomLogger(PersonDAO.class.getName(), ex.getMessage(), Level.SEVERE);
         }
