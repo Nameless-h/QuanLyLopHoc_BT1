@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import DTO.CourseDTO;
 import DTO.CourseInstructorDTO;
 import DTO.DepartmentDTO;
 import Database.DBConnection;
@@ -47,4 +48,38 @@ public class DepartmentDAO {
         return listTmp;
     }
 
+    public boolean Add(DepartmentDTO d) {
+        try {
+            String sql = "INSERT INTO department(name,budget,startDate,adminstrator) VALUES ('";
+            sql += d.getName() + "',";
+            sql += d.getBudget() + ",";
+            sql += d.getStartDate() + ",";
+            sql += d.getAdminstrator() + ")";
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: DepartmentDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean Set(DepartmentDTO d) {
+        try {
+            String sql = "UPDATE department SET ";
+            sql += "name = '" + d.getName() + "',";
+            sql += "budget = " + d.getBudget() + ",";
+            sql += "startDate = " + d.getStartDate();
+            sql += "adminstrator = " + d.getAdminstrator();
+            sql += " WHERE departmentID = " + d.getDepartmentID();
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: DepartmentDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
 }

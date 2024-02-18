@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import DTO.CourseDTO;
 import DTO.OnlineCourseDTO;
 import DTO.StudentGradeDTO;
 import Database.DBConnection;
@@ -17,13 +18,13 @@ import java.util.logging.Level;
  * @author JN_PC
  */
 public class StudentGradeDAO {
-     private DBConnection db;
+    private DBConnection db;
 
-    public StudentGradeDAO(){
+    public StudentGradeDAO() {
         db = new DBConnection();
     }
-    
-    public ArrayList<StudentGradeDTO> getAllStudentGrade(){
+
+    public ArrayList<StudentGradeDTO> getAllStudentGrade() {
         ArrayList<StudentGradeDTO> listTmp = new ArrayList<StudentGradeDTO>();
         String sql = "SELECT * FROM studentgrade";
         try {
@@ -44,5 +45,38 @@ public class StudentGradeDAO {
             CustomLogger.CustomLogger(StudentGradeDAO.class.getName(), ex.getMessage(), Level.SEVERE);
         }
         return listTmp;
+    }
+
+    public boolean Add(StudentGradeDTO s) {
+        try {
+            String sql = "INSERT INTO studentgrade(courseID,studentID,grade) VALUES (";
+            sql += s.getCourseID() + ",";
+            sql += s.getStudentID() + ",";
+            sql += s.getGrade() + ")";
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: StudentGradeDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean Set(StudentGradeDTO s) {
+        try {
+            String sql = "UPDATE studentgrade SET ";
+            sql += "courseID = " + s.getCourseID() + ",";
+            sql += "studentID = " + s.getStudentID() + ",";
+            sql += "grade = " + s.getGrade();
+            sql += " WHERE enrollmentID = " + s.getEnrollmentID();
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: StudentGradeDAO.java");
+            System.out.println(e);
+            return false;
+        }
     }
 }

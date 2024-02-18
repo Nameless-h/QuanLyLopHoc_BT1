@@ -17,60 +17,58 @@ import java.sql.Statement;
  * @author Minh Minion
  */
 public class DBConnection {
+
     private String user = "root";
-    private String password="";
-    private String url="jdbc:mySQL://localhost:3307/course_management";;
+    private String password = "";
+    private String url = "jdbc:mySQL://localhost:3307/course_management";
     private Connection conn = null;
-    private Statement st = null;
-    
-    public void Connect()
-    {
-         try {
+
+
+    public void Connect() {
+        try {
             conn = DriverManager.getConnection(url, user, password);
         } catch (SQLException ex) {
             CustomLogger.CustomLogger(DBConnection.class.getName(), ex.getMessage(), Level.SEVERE);
         }
     }
-    public void disConnect()
-    { 
-        try{
-            st.close();
+
+    public void disConnect() {
+        try {
             conn.close();
-        }catch (SQLException ex){
-        CustomLogger.CustomLogger(DBConnection.class.getName(), ex.getMessage(), Level.SEVERE);}
+        } catch (SQLException ex) {
+            CustomLogger.CustomLogger(DBConnection.class.getName(), ex.getMessage(), Level.SEVERE);
+        }
     }
-    
-    public ResultSet executeQuery(String sql)
-    {
+
+    public ResultSet executeQuery(String sql) {
         ResultSet rs = null;
         try {
             Connect();
-            st = conn.createStatement();
+            Statement st = conn.createStatement();
             rs = st.executeQuery(sql);
         } catch (SQLException ex) {
             CustomLogger.CustomLogger(DBConnection.class.getName(), ex.getMessage(), Level.SEVERE);
         }
         return rs;
     }
-    
-    public void executeUpdate(String sql)
-    {
+
+    public void executeUpdate(String sql) {
         try {
             Connect();
-            st = conn.createStatement();
+            Statement st = conn.createStatement();
             st.executeUpdate(sql);
             disConnect();
         } catch (SQLException ex) {
             CustomLogger.CustomLogger(DBConnection.class.getName(), ex.getMessage(), Level.SEVERE);
         }
     }
-    public Connection getConnection()
-    {
+
+    public Connection getConnection() {
         Connect();
         return conn;
     }
-    public boolean isConnect()
-    {
-        return conn!=null;
+
+    public boolean isConnect() {
+        return conn != null;
     }
 }

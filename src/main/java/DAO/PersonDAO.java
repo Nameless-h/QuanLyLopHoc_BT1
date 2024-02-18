@@ -19,40 +19,65 @@ import java.util.logging.Level;
 public class PersonDAO {
 
     private DBConnection db;
-    private ArrayList<PersonDTO> list;
-
-    public ArrayList<PersonDTO> getList() {
-        return list;
-    }
 
     public PersonDAO() {
         db = new DBConnection();
-        list = getAllPerson();
- 
     }
-    
-    public ArrayList<PersonDTO> getAllPerson(){
+
+    public ArrayList<PersonDTO> getAllPerson() {
         ArrayList<PersonDTO> listTmp = new ArrayList<PersonDTO>();
         String sql = "SELECT * FROM person";
         try {
             ResultSet rs = db.executeQuery(sql);
-            if (rs.next()) {
-                rs.beforeFirst();
-                PersonDTO tmp;
-                while (rs.next()) {
-                    tmp = new PersonDTO();
-                    tmp.setPersonID(rs.getInt("personID"));
-                    tmp.setFirstName(rs.getString("firstName"));
-                    tmp.setLastName(rs.getString("lastName"));
-                    tmp.setEnrollmentDate(rs.getString("enrollmentDate"));
-                    tmp.setHireDate(rs.getString("hireDate"));
-                    list.add(tmp);
-                }
+            PersonDTO tmp;
+            while (rs.next()) {
+                tmp = new PersonDTO();
+                tmp.setPersonID(rs.getInt("personID"));
+                tmp.setFirstName(rs.getString("firstName"));
+                tmp.setLastName(rs.getString("lastName"));
+                tmp.setEnrollmentDate(rs.getString("enrollmentDate"));
+                tmp.setHireDate(rs.getString("hireDate"));
+                listTmp.add(tmp);
             }
         } catch (Exception ex) {
+            System.out.println("Error in file: PersonDAO.java");
             CustomLogger.CustomLogger(PersonDAO.class.getName(), ex.getMessage(), Level.SEVERE);
         }
         return listTmp;
     }
 
+    public boolean Add(PersonDTO ps) {
+        try {
+            String sql = "INSERT INTO person(firstName,lastName,enrollmentDate,hireDate) VALUES ('"
+                    + ps.getFirstName() + "','"
+                    + ps.getLastName() + "',"
+                    + ps.getEnrollmentDate() + ","
+                    + ps.getHireDate() + ")";
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: PersonDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean Set(PersonDTO ps) {
+        try {
+            String sql = "UPDATE person SET ";
+            sql += "firstName = '" + ps.getFirstName() + "',";
+            sql += "lastName = '" + ps.getLastName() + "',";
+            sql += "enrollmentDate = " + ps.getEnrollmentDate() + ",";
+            sql += "hireDate = " + ps.getHireDate();
+            sql += " WHERE personID = " + ps.getPersonID();
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Error in file: PersonDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
 }
