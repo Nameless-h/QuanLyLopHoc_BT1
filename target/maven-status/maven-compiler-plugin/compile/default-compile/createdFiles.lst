@@ -20,11 +20,11 @@ DAO\CourseDAO.class
 BUS\OnlineCourseBUS.class
 BUS\StudentGradeBUS.class
 BUS\OfficeAssignmentBUS.class
+GUI\MainForm$1.class
 DTO\StudentGradeDTO.class
 BUS\PersonBUS.class
 Utility\CustomLogger.class
 DAO\DepartmentDAO.class
 DAO\OfficeAssignmentDAO.class
 DTO\CourseInstructorDTO.class
-Database\e.class
 com\mycompany\quanlylophoc\MainFrame.class

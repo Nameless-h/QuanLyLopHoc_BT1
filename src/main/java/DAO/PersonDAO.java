@@ -19,15 +19,9 @@ import java.util.logging.Level;
 public class PersonDAO {
 
     private DBConnection db;
-    private ArrayList<PersonDTO> list;
-
-    public ArrayList<PersonDTO> getList() {
-        return list;
-    }
 
     public PersonDAO() {
         db = new DBConnection();
-        list = getAllPerson();
     }
 
     public ArrayList<PersonDTO> getAllPerson() {
@@ -35,18 +29,15 @@ public class PersonDAO {
         String sql = "SELECT * FROM person";
         try {
             ResultSet rs = db.executeQuery(sql);
-            if (rs.next()) {
-                rs.beforeFirst();
-                PersonDTO tmp;
-                while (rs.next()) {
-                    tmp = new PersonDTO();
-                    tmp.setPersonID(rs.getInt("personID"));
-                    tmp.setFirstName(rs.getString("firstName"));
-                    tmp.setLastName(rs.getString("lastName"));
-                    tmp.setEnrollmentDate(rs.getString("enrollmentDate"));
-                    tmp.setHireDate(rs.getString("hireDate"));
-                    list.add(tmp);
-                }
+            PersonDTO tmp;
+            while (rs.next()) {
+                tmp = new PersonDTO();
+                tmp.setPersonID(rs.getInt("personID"));
+                tmp.setFirstName(rs.getString("firstName"));
+                tmp.setLastName(rs.getString("lastName"));
+                tmp.setEnrollmentDate(rs.getString("enrollmentDate"));
+                tmp.setHireDate(rs.getString("hireDate"));
+                listTmp.add(tmp);
             }
         } catch (Exception ex) {
             System.out.println("Error in file: PersonDAO.java");
