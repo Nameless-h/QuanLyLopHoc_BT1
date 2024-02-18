@@ -29,19 +29,16 @@ public class PersonDAO {
         String sql = "SELECT * FROM person";
         try {
             ResultSet rs = db.executeQuery(sql);
-                //rs.beforeFirst();
-                PersonDTO tmp;
-                while (rs.next()) {
-                    tmp = new PersonDTO();
-                    tmp.setPersonID(rs.getInt("personID"));
-                    tmp.setFirstName(rs.getString("firstName"));
-                    tmp.setLastName(rs.getString("lastName"));
-                    tmp.setEnrollmentDate(rs.getString("enrollmentDate"));
-                    tmp.setHireDate(rs.getString("hireDate"));
-                    listTmp.add(tmp);
-                }
-            rs.close();
-            db.disConnect();
+            PersonDTO tmp;
+            while (rs.next()) {
+                tmp = new PersonDTO();
+                tmp.setPersonID(rs.getInt("personID"));
+                tmp.setFirstName(rs.getString("firstName"));
+                tmp.setLastName(rs.getString("lastName"));
+                tmp.setEnrollmentDate(rs.getString("enrollmentDate"));
+                tmp.setHireDate(rs.getString("hireDate"));
+                listTmp.add(tmp);
+            }
         } catch (Exception ex) {
             System.out.println("Error in file: PersonDAO.java");
             CustomLogger.CustomLogger(PersonDAO.class.getName(), ex.getMessage(), Level.SEVERE);
