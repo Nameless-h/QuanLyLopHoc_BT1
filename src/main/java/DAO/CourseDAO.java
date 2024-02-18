@@ -43,6 +43,31 @@ public class CourseDAO {
         }
         return listTmp;
     }
+    
+    public ArrayList<CourseDTO> getAllCourseBySearch(String input) {
+        ArrayList<CourseDTO> listTmp = new ArrayList<CourseDTO>();
+        String sql = "SELECT * FROM course WHERE courseID LIKE '%";
+            sql += input +"%' OR title LIKE '%";
+            sql += input +"%'";
+        System.out.println(sql);
+
+        try {
+            ResultSet rs = db.executeQuery(sql);
+            CourseDTO tmp;
+            while (rs.next()) {
+                tmp = new CourseDTO();
+                tmp.setCourseID(rs.getInt("courseID"));
+                tmp.setCredits(rs.getString("credits"));
+                tmp.setDepartmentID(rs.getInt("departmentID"));
+                tmp.setTitle(rs.getString("title"));
+                listTmp.add(tmp);
+            }
+        } catch (Exception ex) {
+            System.out.println("Error in file: CourseDAO.java");
+            CustomLogger.CustomLogger(PersonDAO.class.getName(), ex.getMessage(), Level.SEVERE);
+        }
+        return listTmp;
+    }
 
     public boolean Add(CourseDTO c) {
         try {

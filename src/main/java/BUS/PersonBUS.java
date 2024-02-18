@@ -38,6 +38,11 @@ public class PersonBUS {
         }
         return null;
     }
+    
+    public void GetPersonBySearch(String input) {
+         PersonDAO psDAO = new PersonDAO();
+        listps = psDAO.getAllPersonBySearch(input);
+    }
 
     public boolean AddPerson(PersonDTO ps) {
         PersonDAO psDAO = new PersonDAO();
