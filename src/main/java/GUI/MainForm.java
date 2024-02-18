@@ -8,10 +8,14 @@ import BUS.CourseBUS;
 import BUS.CourseInstructorBUS;
 import BUS.PersonBUS;
 import DTO.CourseInstructorDTO;
+import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -31,7 +35,7 @@ public class MainForm extends javax.swing.JFrame {
      * Creates new form MainForm
      */
     public MainForm() {
-
+        FlatLightLaf.setup();
         initComponents();
         runMain();
         cour_instrucBUS = new CourseInstructorBUS();
@@ -40,6 +44,20 @@ public class MainForm extends javax.swing.JFrame {
         loadDataIntoTableModel();
     }
 
+    public void addPlaceHolderStyle(JTextField jtf) {
+        Font f = jtf.getFont();
+        f = f.deriveFont(Font.ITALIC);
+        jtf.setFont(f);
+        jtf.setForeground(Color.gray);
+    }
+    
+    public void removePlaceHolderStyle(JTextField jtf) {
+        Font f = jtf.getFont();
+        f = f.deriveFont(Font.PLAIN | Font.BOLD);
+        jtf.setFont(f);
+        jtf.setForeground(Color.black);
+    }
+    
     public void loadDataIntoTableModel() {
         DefaultTableModel model = (DefaultTableModel) mainTbl.getModel();
         model.setRowCount(0);
@@ -75,6 +93,7 @@ public class MainForm extends javax.swing.JFrame {
         txtCourseID = new javax.swing.JTextField();
         txtCredit = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
+        jtf_search = new javax.swing.JTextField();
         editBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
         delBtn = new javax.swing.JButton();
@@ -107,6 +126,8 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         mainTbl.setColumnSelectionAllowed(true);
+        mainTbl.setCellSelectionEnabled(false);
+        mainTbl.setRowSelectionAllowed(true);
         mainTbl.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 mainTblClicked(evt);
@@ -146,7 +167,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtCredit, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtCourseName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
                 .addGroup(information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtIntructName, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtInstructID, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -161,29 +182,87 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(txtCourseID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCredit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37)
-                .addGroup(information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(txtCourseName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtIntructName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
+        information_panelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtCourseName, txtIntructName});
+
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Action"));
 
+        jtf_search.setText("Search by ID/name");
+        jtf_search.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtf_searchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtf_searchFocusLost(evt);
+            }
+        });
+        jtf_search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtf_searchActionPerformed(evt);
+            }
+        });
+
         editBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        editBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        editBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         editBtn.setLabel("Edit");
-        jPanel4.add(editBtn);
 
         addBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        addBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         addBtn.setLabel("Add");
         addBtn.setName(""); // NOI18N
-        jPanel4.add(addBtn);
 
         delBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        delBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        delBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         delBtn.setLabel("Delete");
-        jPanel4.add(delBtn);
+        delBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                delBtnMouseClicked(evt);
+            }
+        });
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons8-reload-20.png"))); // NOI18N
-        jPanel4.add(jButton1);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jtf_search, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(editBtn)
+                .addGap(5, 5, 5)
+                .addComponent(addBtn)
+                .addGap(5, 5, 5)
+                .addComponent(delBtn)
+                .addGap(5, 5, 5)
+                .addComponent(jButton1)
+                .addGap(14, 14, 14))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jtf_search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editBtn)
+                    .addComponent(addBtn)
+                    .addComponent(delBtn)
+                    .addComponent(jButton1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {editBtn, jtf_search});
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -205,7 +284,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -215,7 +294,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 711, Short.MAX_VALUE)
+            .addGap(0, 707, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,7 +307,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 711, Short.MAX_VALUE)
+            .addGap(0, 707, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,14 +323,15 @@ public class MainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mainTblClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainTblClicked
+        DefaultTableModel model = (DefaultTableModel)mainTbl.getModel();
         int selectedRow = mainTbl.getSelectedRow();
 
         // Check if a valid cell is clicked
         if (selectedRow != -1 ) {
-            Object courseID = mainTbl.getValueAt(selectedRow, 0);
-            Object courseName = mainTbl.getValueAt(selectedRow, 1);
-            Object personID = mainTbl.getValueAt(selectedRow, 2);
-            Object personName = mainTbl.getValueAt(selectedRow, 3);
+            Object courseID = model.getValueAt(selectedRow, 0);
+            Object courseName = model.getValueAt(selectedRow, 1);
+            Object personID = model.getValueAt(selectedRow, 2);
+            Object personName = model.getValueAt(selectedRow, 3);
             
             txtCourseID.setText(courseID.toString());
             txtCourseName.setText(courseName.toString());
@@ -260,6 +340,79 @@ public class MainForm extends javax.swing.JFrame {
             txtIntructName.setText(personName.toString());
         }
     }//GEN-LAST:event_mainTblClicked
+
+    private void jtf_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtf_searchActionPerformed
+        // TODO add your handling code here:
+        String input = jtf_search.getText();
+        DefaultTableModel model = (DefaultTableModel) mainTbl.getModel();
+        model.setRowCount(0);
+        // You can replace this with actual data loading logic from a database or another source
+        ArrayList<CourseInstructorDTO> listCourse = cour_instrucBUS.getList();
+        for (CourseInstructorDTO tmp : listCourse) {
+            String course_title =  courseBUS.GetCourseById(tmp.getCourseID()).getTitle();
+            String person_name = personBUS.GetPersonById(tmp.getPersonID()).getFirstName()+" "+ personBUS.GetPersonById(tmp.getPersonID()).getLastName();
+            String course_id = Integer.toString(tmp.getCourseID());
+            String person_id = Integer.toString(tmp.getPersonID());
+
+            if(course_title.contains(input) ||
+                person_name.contains(input) || 
+                course_id.contains(input) ||
+                person_id.contains(input)
+            ) {
+                System.out.println(tmp.getCourseID());
+                model.addRow(new Object[]{tmp.getCourseID(), course_title,tmp.getPersonID(),person_name });
+            }
+        }
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        mainTbl.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        mainTbl.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        System.out.println(input);
+    }//GEN-LAST:event_jtf_searchActionPerformed
+
+    private void jtf_searchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchFocusGained
+        // TODO add your handling code here:
+        if(jtf_search.getText().equals("Search by ID/name")) {
+            jtf_search.setText(null);
+            jtf_search.requestFocus();
+            removePlaceHolderStyle(jtf_search);
+        }
+    }//GEN-LAST:event_jtf_searchFocusGained
+
+    private void jtf_searchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchFocusLost
+        // TODO add your handling code here:
+        if(jtf_search.getText().length() == 0) {
+            addPlaceHolderStyle(jtf_search);
+            jtf_search.setText("Search by ID/name");
+        }
+    }//GEN-LAST:event_jtf_searchFocusLost
+
+    private void delBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delBtnMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)mainTbl.getModel();
+        int selectedRow = mainTbl.getSelectedRow();
+
+        // Check if a valid cell is clicked
+        if (selectedRow != -1 ) {
+            mainTbl.setRowSelectionInterval(selectedRow, selectedRow);
+            Object courseID = model.getValueAt(selectedRow, 0);
+            Object courseName = model.getValueAt(selectedRow, 1);
+            Object personID = model.getValueAt(selectedRow, 2);
+            Object personName = model.getValueAt(selectedRow, 3);
+           
+            int res = JOptionPane.showConfirmDialog(null, "Are you sure want to continue","Delete confirmation",JOptionPane.YES_NO_CANCEL_OPTION);
+            if(res != 0) {
+                return;
+            }
+            
+            CourseInstructorDTO ciDTO = new CourseInstructorDTO((int)courseID,(int)personID);
+            cour_instrucBUS.DeleteCourseInstructor(ciDTO);
+            loadDataIntoTableModel();
+            System.out.println(courseID);
+        } else {
+            JOptionPane.showMessageDialog(null,"Please select a row in table to delete");
+        }
+    }//GEN-LAST:event_delBtnMouseClicked
 
     private String string;
 
@@ -320,6 +473,7 @@ public class MainForm extends javax.swing.JFrame {
         setSize(1000, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+        addPlaceHolderStyle(jtf_search);
     }
 
 
@@ -335,6 +489,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jtf_search;
     private javax.swing.JTable mainTbl;
     private javax.swing.JTextField txtCourseID;
     private javax.swing.JTextField txtCourseName;
