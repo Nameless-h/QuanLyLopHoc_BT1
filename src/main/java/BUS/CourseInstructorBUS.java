@@ -43,4 +43,12 @@ public class CourseInstructorBUS {
         }
         return false;
     }
+    
+    public boolean CheckExistCourseInstructor(int cID,int pID) {
+        for(CourseInstructorDTO c : this.listcourseInstructor) {
+            if(c.getCourseID() == cID && c.getPersonID() == pID)
+                return true;
+        }
+        return false;
+    }
 }

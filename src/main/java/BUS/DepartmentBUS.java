@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import DAO.DepartmentDAO;
 import DTO.DepartmentDTO;
+import java.awt.Component;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 
 public class DepartmentBUS {
     private ArrayList<DepartmentDTO> listDepartment;
@@ -50,5 +55,23 @@ public class DepartmentBUS {
             }
         }
         return false;
+    }
+    
+    public void LoadCourseToComboBox(JComboBox cb) {
+        DefaultComboBoxModel dcm = new DefaultComboBoxModel();
+        cb.setModel(dcm);
+        dcm.addElement(new Object[]{0,"All"});
+        for(DepartmentDTO d : this.listDepartment) {
+            dcm.addElement(new Object[]{d.getDepartmentID(),d.getName()});
+        }
+        cb.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value != null && value instanceof Object[]) {
+                    value = ((Object[]) value)[1]; // Lấy giá trị (value) từ đối tượng mảng
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
     }
 }
