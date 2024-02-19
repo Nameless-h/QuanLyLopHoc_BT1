@@ -12,6 +12,7 @@ import DTO.CourseDTO;
 import DTO.CourseInstructorDTO;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -36,6 +37,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
     public AddInstructorForm() {
         initComponents();
         setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         personBUS.LoadPersonToComboBox(cbPerson);
         departmentBUS.LoadCourseToComboBox(cbDepartment);
     }

@@ -29,6 +29,11 @@ public class CourseBUS {
         }
         return null;
     }
+    
+    public void GetCourseBySearch(String input) {
+        CourseDAO courseDAO = new CourseDAO();
+        listcourse = courseDAO.getAllCourseBySearch(input);
+    }
 
     public boolean AddCourse(CourseDTO c) {
         CourseDAO courseDAO = new CourseDAO();

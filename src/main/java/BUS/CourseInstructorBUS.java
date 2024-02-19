@@ -21,7 +21,7 @@ public class CourseInstructorBUS {
     public ArrayList<CourseInstructorDTO> getList() {
         return this.listcourseInstructor;
     }
-
+    
     public boolean AddCourseInstructor(CourseInstructorDTO c) {
         CourseInstructorDAO courseInstructorDAO = new CourseInstructorDAO();
         if (courseInstructorDAO.Add(c)) {
