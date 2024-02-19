@@ -24,6 +24,12 @@
             <version>SNAPSHOT</version>
         </dependency>-->
         <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.1.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>KControls-2.0</artifactId>
             <version>SNAPSHOT</version>

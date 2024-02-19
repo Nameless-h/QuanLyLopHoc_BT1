@@ -45,6 +45,34 @@ public class PersonDAO {
         }
         return listTmp;
     }
+    
+    public ArrayList<PersonDTO> getAllPersonBySearch(String input) {
+        ArrayList<PersonDTO> listTmp = new ArrayList<PersonDTO>();
+//        String sql = "SELECT * FROM person";
+        String sql = "SELECT * FROM person WHERE personID LIKE '%";
+            sql += input +"%' OR firstName LIKE '%";
+            sql += input +"%' OR lastName LIKE '%";
+            sql += input +"%'";
+        System.out.println(sql);
+
+        try {
+            ResultSet rs = db.executeQuery(sql);
+            PersonDTO tmp;
+            while (rs.next()) {
+                tmp = new PersonDTO();
+                tmp.setPersonID(rs.getInt("personID"));
+                tmp.setFirstName(rs.getString("firstName"));
+                tmp.setLastName(rs.getString("lastName"));
+                tmp.setEnrollmentDate(rs.getString("enrollmentDate"));
+                tmp.setHireDate(rs.getString("hireDate"));
+                listTmp.add(tmp);
+            }
+        } catch (Exception ex) {
+            System.out.println("Error in file: PersonDAO.java");
+            CustomLogger.CustomLogger(PersonDAO.class.getName(), ex.getMessage(), Level.SEVERE);
+        }
+        return listTmp;
+    }
 
     public boolean Add(PersonDTO ps) {
         try {
