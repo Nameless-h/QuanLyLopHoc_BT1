@@ -399,17 +399,16 @@ public class MainForm extends javax.swing.JFrame {
         // another source
         ArrayList<CourseInstructorDTO> listCourse = cour_instrucBUS.getList();
         for (CourseInstructorDTO tmp : listCourse) {
-            String course_title = courseBUS.GetCourseById(tmp.getCourseID()).getTitle().toLowerCase();
-            String person_name = personBUS.GetPersonById(tmp.getPersonID()).getFirstName().toLowerCase() + " "
-                    + personBUS.GetPersonById(tmp.getPersonID()).getLastName().toLowerCase();
+            String course_title = courseBUS.GetCourseById(tmp.getCourseID()).getTitle();
+            String person_name = personBUS.GetPersonById(tmp.getPersonID()).getFirstName() + " "
+                    + personBUS.GetPersonById(tmp.getPersonID()).getLastName();
             String course_id = Integer.toString(tmp.getCourseID());
             String person_id = Integer.toString(tmp.getPersonID());
 
-            if (course_title.contains(input) ||
-                    person_name.contains(input) ||
+            if (course_title.toLowerCase().contains(input) ||
+                    person_name.toLowerCase().contains(input) ||
                     course_id.contains(input) ||
                     person_id.contains(input)) {
-                System.out.println(tmp.getCourseID());
                 model.addRow(new Object[] { tmp.getCourseID(), course_title, tmp.getPersonID(), person_name });
             }
         }
