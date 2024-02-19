@@ -392,16 +392,16 @@ public class MainForm extends javax.swing.JFrame {
 
     private void jtf_searchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jtf_searchActionPerformed
         // TODO add your handling code here:
-        String input = jtf_search.getText();
+        String input = jtf_search.getText().toLowerCase().trim();
         DefaultTableModel model = (DefaultTableModel) mainTbl.getModel();
         model.setRowCount(0);
         // You can replace this with actual data loading logic from a database or
         // another source
         ArrayList<CourseInstructorDTO> listCourse = cour_instrucBUS.getList();
         for (CourseInstructorDTO tmp : listCourse) {
-            String course_title = courseBUS.GetCourseById(tmp.getCourseID()).getTitle();
-            String person_name = personBUS.GetPersonById(tmp.getPersonID()).getFirstName() + " "
-                    + personBUS.GetPersonById(tmp.getPersonID()).getLastName();
+            String course_title = courseBUS.GetCourseById(tmp.getCourseID()).getTitle().toLowerCase();
+            String person_name = personBUS.GetPersonById(tmp.getPersonID()).getFirstName().toLowerCase() + " "
+                    + personBUS.GetPersonById(tmp.getPersonID()).getLastName().toLowerCase();
             String course_id = Integer.toString(tmp.getCourseID());
             String person_id = Integer.toString(tmp.getPersonID());
 
