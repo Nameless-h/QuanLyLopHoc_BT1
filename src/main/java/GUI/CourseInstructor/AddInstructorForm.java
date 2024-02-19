@@ -10,6 +10,7 @@ import BUS.DepartmentBUS;
 import BUS.PersonBUS;
 import DTO.CourseDTO;
 import DTO.CourseInstructorDTO;
+import GUI.MainForm;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -31,6 +32,8 @@ public class AddInstructorForm extends javax.swing.JFrame {
     CourseBUS courseBUS = new CourseBUS();
     DepartmentBUS departmentBUS = new DepartmentBUS();
     CourseInstructorBUS instuctorBUS = new CourseInstructorBUS();
+    MainForm parent;
+
     /**
      * Creates new form ThemPhanCongForm
      */
@@ -40,6 +43,15 @@ public class AddInstructorForm extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         personBUS.LoadPersonToComboBox(cbPerson);
         departmentBUS.LoadCourseToComboBox(cbDepartment);
+    }
+
+    public AddInstructorForm(MainForm mafr) {
+        initComponents();
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        personBUS.LoadPersonToComboBox(cbPerson);
+        departmentBUS.LoadCourseToComboBox(cbDepartment);
+        this.parent = (MainForm) mafr;
     }
 
     /**
@@ -205,13 +217,13 @@ public class AddInstructorForm extends javax.swing.JFrame {
         Object selectedValue = cbPerson.getSelectedItem();
         if (selectedValue != null && selectedValue instanceof Object[]) {
             Object[] pair = (Object[]) selectedValue;
-            LoadCourseToTable(tbCourse, 0, "", (int)pair[0]);
+            LoadCourseToTable(tbCourse, 0, "", (int) pair[0]);
         }
     }//GEN-LAST:event_cbPersonActionPerformed
 
     private void cbDepartmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDepartmentActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_cbDepartmentActionPerformed
 
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
@@ -221,7 +233,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
         if ((selectedValueDpm != null && selectedValueDpm instanceof Object[]) && (selectedValuePs != null && selectedValuePs instanceof Object[])) {
             Object[] pairDpm = (Object[]) selectedValueDpm;
             Object[] pairPs = (Object[]) selectedValuePs;
-            LoadCourseToTable(tbCourse,(int)pairDpm[0],txtSearch.getText(),(int)pairPs[0]);
+            LoadCourseToTable(tbCourse, (int) pairDpm[0], txtSearch.getText(), (int) pairPs[0]);
         }
     }//GEN-LAST:event_btSearchActionPerformed
 
@@ -230,27 +242,28 @@ public class AddInstructorForm extends javax.swing.JFrame {
         Object selectedValue = cbPerson.getSelectedItem();
         if (selectedValue != null && selectedValue instanceof Object[]) {
             Object[] pair = (Object[]) selectedValue;
-            for(int i=0;i<tbCourse.getRowCount();i++) {
-                if((boolean)tbCourse.getValueAt(i, 0) && !instuctorBUS.CheckExistCourseInstructor((int)tbCourse.getValueAt(i, 1), (int)pair[0])) {
-                    CourseInstructorDTO c = new CourseInstructorDTO((int)tbCourse.getValueAt(i, 1), (int)pair[0]);
-                    if(!instuctorBUS.AddCourseInstructor(c)) {
-                       JOptionPane.showMessageDialog(this,"Update Failed!","Notificatioin",2);
-                       return;
+            for (int i = 0; i < tbCourse.getRowCount(); i++) {
+                if ((boolean) tbCourse.getValueAt(i, 0) && !instuctorBUS.CheckExistCourseInstructor((int) tbCourse.getValueAt(i, 1), (int) pair[0])) {
+                    CourseInstructorDTO c = new CourseInstructorDTO((int) tbCourse.getValueAt(i, 1), (int) pair[0]);
+                    if (!instuctorBUS.AddCourseInstructor(c)) {
+                        JOptionPane.showMessageDialog(this, "Update Failed!", "Notificatioin", 2);
+                        return;
                     }
-                } else if (!(boolean)tbCourse.getValueAt(i, 0) && instuctorBUS.CheckExistCourseInstructor((int)tbCourse.getValueAt(i, 1), (int)pair[0])) {
-                    CourseInstructorDTO c = new CourseInstructorDTO((int)tbCourse.getValueAt(i, 1), (int)pair[0]);
-                    if(!instuctorBUS.DeleteCourseInstructor(c)) {
-                       JOptionPane.showMessageDialog(this,"Update Failed!","Notificatioin",2);
+                } else if (!(boolean) tbCourse.getValueAt(i, 0) && instuctorBUS.CheckExistCourseInstructor((int) tbCourse.getValueAt(i, 1), (int) pair[0])) {
+                    CourseInstructorDTO c = new CourseInstructorDTO((int) tbCourse.getValueAt(i, 1), (int) pair[0]);
+                    if (!instuctorBUS.DeleteCourseInstructor(c)) {
+                        JOptionPane.showMessageDialog(this, "Update Failed!", "Notificatioin", 2);
                     }
                 }
             }
-            JOptionPane.showMessageDialog(this,"Update Successful","Notificatioin",1);
+            this.parent.loadDataIntoTableModel();
+            JOptionPane.showMessageDialog(this, "Update Successful", "Notificatioin", 1);
         }
     }//GEN-LAST:event_btSaveActionPerformed
 
-    public void LoadCourseToTable(JTable tb,int dpmID,String search,int psID) {
-        String[] col = new String[]{"Select","Course ID","Course Title","Credits"};
-        DefaultTableModel model = new DefaultTableModel(col,0) {
+    public void LoadCourseToTable(JTable tb, int dpmID, String search, int psID) {
+        String[] col = new String[]{"Select", "Course ID", "Course Title", "Credits"};
+        DefaultTableModel model = new DefaultTableModel(col, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 0;
@@ -258,7 +271,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
 
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                if(columnIndex == 0){
+                if (columnIndex == 0) {
                     return Boolean.class;
                 }
                 return super.getColumnClass(columnIndex);
@@ -266,10 +279,10 @@ public class AddInstructorForm extends javax.swing.JFrame {
         };
         courseBUS.ListCourse();
         ArrayList<CourseDTO> listcourse = courseBUS.getList();
-        if(dpmID == 0) {
+        if (dpmID == 0) {
             Object[] row;
             for (CourseDTO c : listcourse) {
-                if(c.getTitle().toLowerCase().contains(search.toLowerCase())){
+                if (c.getTitle().toLowerCase().contains(search.toLowerCase())) {
                     row = new Object[4];
                     row[0] = instuctorBUS.CheckExistCourseInstructor(c.getCourseID(), psID);
                     row[1] = c.getCourseID();
@@ -277,30 +290,30 @@ public class AddInstructorForm extends javax.swing.JFrame {
                     row[3] = c.getCredits();
                     model.addRow(row);
                 }
-            }  
+            }
         } else {
             Object[] row;
             for (CourseDTO c : listcourse) {
-                if(c.getDepartmentID() == dpmID && c.getTitle().toLowerCase().contains(search.toLowerCase())){
+                if (c.getDepartmentID() == dpmID && c.getTitle().toLowerCase().contains(search.toLowerCase())) {
                     row = new Object[4];
-                    row[0] =instuctorBUS.CheckExistCourseInstructor(c.getCourseID(), psID);
+                    row[0] = instuctorBUS.CheckExistCourseInstructor(c.getCourseID(), psID);
                     row[1] = c.getCourseID();
                     row[2] = c.getTitle();
                     row[3] = c.getCredits();
                     model.addRow(row);
                 }
-            }     
-        }         
+            }
+        }
         tb.setModel(model);
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         TableColumnModel colmodel = tbCourse.getColumnModel();
-        
+
         colmodel.getColumn(0).setPreferredWidth(100);
         colmodel.getColumn(1).setPreferredWidth(100);
         colmodel.getColumn(2).setPreferredWidth(400);
         colmodel.getColumn(3).setPreferredWidth(100);
-        
+
         colmodel.getColumn(1).setCellRenderer(centerRenderer);
         colmodel.getColumn(3).setCellRenderer(centerRenderer);
     }
