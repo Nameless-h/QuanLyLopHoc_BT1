@@ -58,6 +58,15 @@ public class AddInstructorForm extends javax.swing.JFrame {
         this.parent = (MainForm) mafr;
     }
 
+    public AddInstructorForm(MainForm mafr) {
+        initComponents();
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        personBUS.LoadPersonToComboBox(cbPerson);
+        departmentBUS.LoadCourseToComboBox(cbDepartment);
+        this.parent = (MainForm) mafr;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -247,7 +256,6 @@ public class AddInstructorForm extends javax.swing.JFrame {
 
     private void cbDepartmentActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbDepartmentActionPerformed
         // TODO add your handling code here:
-
     }// GEN-LAST:event_cbDepartmentActionPerformed
 
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btSearchActionPerformed

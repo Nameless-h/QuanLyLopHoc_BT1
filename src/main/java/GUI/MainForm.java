@@ -65,6 +65,8 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void loadDataIntoTableModel() {
+        System.out.println("GUI.MainForm.loadDataIntoTableModel()");
+        this.cour_instrucBUS.ListCourseInstructor();
         DefaultTableModel model = (DefaultTableModel) mainTbl.getModel();
         model.setRowCount(0);
         // You can replace this with actual data loading logic from a database or
@@ -72,7 +74,6 @@ public class MainForm extends javax.swing.JFrame {
         cour_instrucBUS.ListCourseInstructor();
         ArrayList<CourseInstructorDTO> listCourse = cour_instrucBUS.getList();
         for (CourseInstructorDTO tmp : listCourse) {
-            System.out.println(tmp.getCourseID());
             model.addRow(new Object[] { tmp.getCourseID(), courseBUS.GetCourseById(tmp.getCourseID()).getTitle(),
                     tmp.getPersonID(), personBUS.GetPersonById(tmp.getPersonID()).getFirstName() + " "
                             + personBUS.GetPersonById(tmp.getPersonID()).getLastName() });
@@ -257,7 +258,6 @@ public class MainForm extends javax.swing.JFrame {
                 reloadBtnMouseClicked(evt);
             }
         });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -332,7 +332,6 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Courses", new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-course-48.png")), jPanel1, "Quản lý khóa học"); // NOI18N
-
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
         jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
 
@@ -354,6 +353,7 @@ public class MainForm extends javax.swing.JFrame {
 
             };
         });
+        
     }// GEN-LAST:event_addBtnActionPerformed
 
     private void mainTblClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_mainTblClicked
