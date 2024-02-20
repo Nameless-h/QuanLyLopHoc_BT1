@@ -11,11 +11,14 @@ import BUS.PersonBUS;
 import DTO.CourseDTO;
 import DTO.CourseInstructorDTO;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -36,6 +39,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
      */
     public AddInstructorForm() {
         initComponents();
+        addPlaceHolderStyle(txtSearch);
         setVisible(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         personBUS.LoadPersonToComboBox(cbPerson);
@@ -69,7 +73,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Person", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Roboto", 0, 14))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Instructor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Roboto", 0, 14))); // NOI18N
 
         cbPerson.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,6 +99,16 @@ public class AddInstructorForm extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Course Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Roboto", 0, 14))); // NOI18N
+
+        txtSearch.setText("Search by course name/ID");
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSearchFocusLost(evt);
+            }
+        });
 
         btSearch.setText("Search");
         btSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -171,17 +185,16 @@ public class AddInstructorForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(269, 269, 269)
-                .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,7 +261,40 @@ public class AddInstructorForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btSaveActionPerformed
 
+    public void addPlaceHolderStyle(JTextField jtf) {
+        Font f = jtf.getFont();
+        f = f.deriveFont(Font.ITALIC);
+        jtf.setFont(f);
+        jtf.setForeground(Color.gray);
+    }
+
+    public void removePlaceHolderStyle(JTextField jtf) {
+        Font f = jtf.getFont();
+        f = f.deriveFont(Font.PLAIN | Font.BOLD);
+        jtf.setFont(f);
+        jtf.setForeground(Color.black);
+    }
+    
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+        // TODO add your handling code here:
+        if (txtSearch.getText().equals("Search by course name/ID")) {
+            txtSearch.setText(null);
+            txtSearch.requestFocus();
+            removePlaceHolderStyle(txtSearch);
+        }
+    }//GEN-LAST:event_txtSearchFocusGained
+
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+        // TODO add your handling code here:
+        if (txtSearch.getText().length() == 0) {
+            addPlaceHolderStyle(txtSearch);
+            txtSearch.setText("Search by course name/ID");
+        }
+    }//GEN-LAST:event_txtSearchFocusLost
+
     public void LoadCourseToTable(JTable tb,int dpmID,String search,int psID) {
+        if(search.equalsIgnoreCase("Search by course name/ID"))
+            search = "";
         String[] col = new String[]{"Select","Course ID","Course Title","Credits"};
         DefaultTableModel model = new DefaultTableModel(col,0) {
             @Override
@@ -269,7 +315,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
         if(dpmID == 0) {
             Object[] row;
             for (CourseDTO c : listcourse) {
-                if(c.getTitle().toLowerCase().contains(search.toLowerCase())){
+                if(c.getTitle().toLowerCase().contains(search.toLowerCase()) || Integer.toString(c.getCourseID()).equalsIgnoreCase(search)){
                     row = new Object[4];
                     row[0] = instuctorBUS.CheckExistCourseInstructor(c.getCourseID(), psID);
                     row[1] = c.getCourseID();
@@ -281,7 +327,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
         } else {
             Object[] row;
             for (CourseDTO c : listcourse) {
-                if(c.getDepartmentID() == dpmID && c.getTitle().toLowerCase().contains(search.toLowerCase())){
+                if(c.getDepartmentID() == dpmID && (c.getTitle().toLowerCase().contains(search.toLowerCase()) || Integer.toString(c.getCourseID()).equalsIgnoreCase(search))){
                     row = new Object[4];
                     row[0] =instuctorBUS.CheckExistCourseInstructor(c.getCourseID(), psID);
                     row[1] = c.getCourseID();
