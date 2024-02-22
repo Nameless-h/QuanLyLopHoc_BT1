@@ -47,37 +47,5 @@ public class OnsiteCourseDAO {
         return listTmp;
     }
 
-    public boolean Add(OnsiteCourseDTO c) {
-        try {
-            String sql = "INSERT INTO onsitecourse(courseID,location,days,course_time) VALUES (";
-            sql += c.getCourseID() + ",'";
-            sql += c.getLocation() + "','";
-            sql += c.getDays() + "',";
-            sql += c.getCourse_time() + ")";
-            db.executeUpdate(sql);
-            return true;
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("Error in file: OnsiteCourseDAO.java");
-            System.out.println(e);
-            return false;
-        }
-    }
 
-    public boolean Set(OnsiteCourseDTO c) {
-        try {
-            String sql = "UPDATE onsitecourse SET ";
-            sql += "location = '" + c.getLocation() + "',";
-            sql += "days = '" + c.getDays() + "'',";
-            sql += "course_time = " + c.getCourse_time();
-            sql += " WHERE courseID = " + c.getCourseID();
-            db.executeUpdate(sql);
-            return true;
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("Error in file: OnsiteCourseDAO.java");
-            System.out.println(e);
-            return false;
-        }
-    }
 }
