@@ -10,7 +10,9 @@ import DTO.OnsiteCourseDTO;
 import Database.DBConnection;
 import Utility.CustomLogger;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 
 /**
@@ -47,5 +49,49 @@ public class OnsiteCourseDAO {
         return listTmp;
     }
 
+    public boolean Add(OnsiteCourseDTO c) {
+    try {
+        String sql = "INSERT INTO onsitecourse(courseID, location, days, course_time) VALUES (";
+        sql += c.getCourseID() + ",";
+        sql += "'" + c.getLocation() + "',";
+        sql += "'" + c.getDays() + "',";
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date parsedDate = dateFormat.parse(c.getCourse_time());
+        String courseTimeString = dateFormat.format(parsedDate);
+        sql += "'" + courseTimeString + "')";
+
+        db.executeUpdate(sql);
+        return true;
+    } catch (Exception e) {
+        System.out.println("Error in file: OnsiteCourseDAO.java");
+        System.out.println(e);
+        return false;
+    }
+}
+
+    public boolean Set(OnsiteCourseDTO c) {
+        try {
+            String sql = "UPDATE onsitecourse SET ";
+            sql += "location = '" + c.getLocation() + "',";
+            sql += "days = '" + c.getDays() + "',";
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date parsedDate = dateFormat.parse(c.getCourse_time());
+            String courseTimeString = dateFormat.format(parsedDate);
+
+            sql += "course_time = '" + courseTimeString + "'";
+            sql += " WHERE courseID = " + c.getCourseID();
+
+            db.executeUpdate(sql);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error in file: OnsiteCourseDAO.java");
+            System.out.println(e);
+            return false;
+        }
+    }
+ 
+    
+    
 }
