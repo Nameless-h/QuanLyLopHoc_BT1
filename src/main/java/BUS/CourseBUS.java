@@ -56,6 +56,8 @@ public class CourseBUS {
         }
         return false;
     }
-    
+    public boolean validateData(CourseDTO c) {
+        return !c.getCredits().isEmpty() && !c.getTitle().isEmpty();
+    }
     
 }
