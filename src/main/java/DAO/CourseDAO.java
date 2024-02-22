@@ -71,8 +71,8 @@ public class CourseDAO {
     public boolean Add(CourseDTO c) {
         try {
             String sql = "INSERT INTO course(title,credits,departmentID) VALUES ('";
-            sql += c.getTitle() + "',";
-            sql += c.getCredits() + ",";
+            sql += c.getTitle() + "','";
+            sql += c.getCredits() + "',";
             sql += c.getDepartmentID() + ")";
             db.executeUpdate(sql);
             return true;
@@ -88,7 +88,7 @@ public class CourseDAO {
         try {
             String sql = "UPDATE course SET ";
             sql += "title = '" + c.getTitle() + "',";
-            sql += "credits = " + c.getCredits() + ",";
+            sql += "credits = '" + c.getCredits() + "',";
             sql += "departmentID = " + c.getDepartmentID();
             sql += " WHERE courseID = " + c.getCourseID();
             db.executeUpdate(sql);
