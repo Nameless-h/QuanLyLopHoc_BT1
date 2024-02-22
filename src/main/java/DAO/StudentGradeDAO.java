@@ -4,8 +4,6 @@
  */
 package DAO;
 
-import DTO.CourseDTO;
-import DTO.OnlineCourseDTO;
 import DTO.StudentGradeDTO;
 import Database.DBConnection;
 import Utility.CustomLogger;
@@ -28,19 +26,16 @@ public class StudentGradeDAO {
         ArrayList<StudentGradeDTO> listTmp = new ArrayList<StudentGradeDTO>();
         String sql = "SELECT * FROM studentgrade";
         try {
-            ResultSet rs = db.executeQuery(sql);
-            if (rs.next()) {
-                rs.beforeFirst();
-                StudentGradeDTO tmp;
+            ResultSet rs = db.executeQuery(sql);  
+            StudentGradeDTO tmp;
                 while (rs.next()) {
                     tmp = new StudentGradeDTO();
-                    tmp.setCourseID(rs.getInt("courseID"));
                     tmp.setEnrollmentID(rs.getInt("enrollmentID"));
+                    tmp.setCourseID(rs.getInt("courseID"));
                     tmp.setGrade(rs.getFloat("grade"));
                     tmp.setStudentID(rs.getInt("studentID"));
                     listTmp.add(tmp);
                 }
-            }
         } catch (Exception ex) {
             CustomLogger.CustomLogger(StudentGradeDAO.class.getName(), ex.getMessage(), Level.SEVERE);
         }
