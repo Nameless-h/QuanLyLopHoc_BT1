@@ -51,4 +51,10 @@ public class OnlineCourseBUS {
         }
         return false;
     }
+    public boolean validateData(OnlineCourseDTO c) {
+        if (c.getUrl().isEmpty()) {
+            return false;
+        }
+        return true;
+    }  
 }
