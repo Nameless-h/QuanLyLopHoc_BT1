@@ -7,8 +7,10 @@ package GUI;
 import BUS.CourseBUS;
 import BUS.CourseInstructorBUS;
 import BUS.PersonBUS;
+import BUS.StudentGradeBUS;
 import DTO.CourseDTO;
 import DTO.CourseInstructorDTO;
+import DTO.StudentGradeDTO;
 import GUI.CourseInstructor.AddInstructorForm;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.event.WindowAdapter;
@@ -38,6 +40,7 @@ public class MainForm extends javax.swing.JFrame {
     private CourseInstructorBUS cour_instrucBUS;
     private CourseBUS courseBUS;
     private PersonBUS personBUS;
+    private StudentGradeBUS studentGBUS;
 
     /**
      * Creates new form MainForm
@@ -49,8 +52,11 @@ public class MainForm extends javax.swing.JFrame {
         cour_instrucBUS = new CourseInstructorBUS();
         courseBUS = new CourseBUS();
         personBUS = new PersonBUS();
+        studentGBUS = new StudentGradeBUS();
+        
         loadDataIntoTableModel();
         loadDataCourse();
+        loadDataIntoGradeTable();
     }
 
     public void addPlaceHolderStyle(JTextField jtf) {
@@ -115,6 +121,19 @@ public class MainForm extends javax.swing.JFrame {
         delBtn = new javax.swing.JButton();
         reloadBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        information_panel1 = new javax.swing.JPanel();
+        txtGrade = new javax.swing.JTextField();
+        txtCourseName1 = new javax.swing.JTextField();
+        txtEnrollmentID = new javax.swing.JTextField();
+        txtCourseID1 = new javax.swing.JTextField();
+        txtStudentID = new javax.swing.JTextField();
+        jPanel7 = new javax.swing.JPanel();
+        jtf_search1 = new javax.swing.JTextField();
+        addBtn1 = new javax.swing.JButton();
+        delBtn1 = new javax.swing.JButton();
+        reloadBtn1 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        gradeTB = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -318,15 +337,201 @@ public class MainForm extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Course Instructor", new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-assignment-48.png")), jPanel3, "Quản lý phân công"); // NOI18N
 
+        information_panel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Information"));
+        information_panel1.setName(""); // NOI18N
+
+        txtGrade.setBorder(javax.swing.BorderFactory.createTitledBorder("Grade"));
+
+        txtCourseName1.setBorder(javax.swing.BorderFactory.createTitledBorder("Course name"));
+        txtCourseName1.setPreferredSize(new java.awt.Dimension(69, 40));
+
+        txtEnrollmentID.setBorder(javax.swing.BorderFactory.createTitledBorder("EnrollmentID"));
+        txtEnrollmentID.setPreferredSize(new java.awt.Dimension(69, 40));
+
+        txtCourseID1.setBorder(javax.swing.BorderFactory.createTitledBorder("Course ID"));
+
+        txtStudentID.setBorder(javax.swing.BorderFactory.createTitledBorder("Student ID"));
+
+        javax.swing.GroupLayout information_panel1Layout = new javax.swing.GroupLayout(information_panel1);
+        information_panel1.setLayout(information_panel1Layout);
+        information_panel1Layout.setHorizontalGroup(
+            information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(information_panel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCourseID1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCourseName1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGroup(information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtStudentID, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                    .addComponent(txtEnrollmentID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(82, 82, 82)
+                .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+        );
+        information_panel1Layout.setVerticalGroup(
+            information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(information_panel1Layout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addGroup(information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCourseID1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCourseName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEnrollmentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Action"));
+
+        jtf_search1.setText("Search by ID/name");
+        jtf_search1.setPreferredSize(new java.awt.Dimension(300, 22));
+        jtf_search1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtf_search1FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtf_search1FocusLost(evt);
+            }
+        });
+        jtf_search1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtf_search1ActionPerformed(evt);
+            }
+        });
+
+        addBtn1.setBackground(new java.awt.Color(0, 204, 255));
+        addBtn1.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        addBtn1.setForeground(new java.awt.Color(255, 255, 255));
+        addBtn1.setText("Modify");
+        addBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        addBtn1.setName(""); // NOI18N
+        addBtn1.setPreferredSize(new java.awt.Dimension(80, 40));
+        addBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtn1ActionPerformed(evt);
+            }
+        });
+
+        delBtn1.setBackground(new java.awt.Color(255, 0, 0));
+        delBtn1.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        delBtn1.setForeground(new java.awt.Color(255, 255, 255));
+        delBtn1.setText("Delete");
+        delBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        delBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        delBtn1.setPreferredSize(new java.awt.Dimension(80, 40));
+        delBtn1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                delBtn1MouseClicked(evt);
+            }
+        });
+
+        reloadBtn1.setBackground(new java.awt.Color(153, 153, 153));
+        reloadBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-reload-30.png"))); // NOI18N
+        reloadBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reloadBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        reloadBtn1.setPreferredSize(new java.awt.Dimension(40, 40));
+        reloadBtn1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reloadBtn1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jtf_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(delBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(reloadBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(addBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(delBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(reloadBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jtf_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        gradeTB.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "EnrollmentID", "Course ID", "Course Name", "Student ID", "Grade"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        gradeTB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                gradeTBClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(gradeTB);
+        gradeTB.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (gradeTB.getColumnModel().getColumnCount() > 0) {
+            gradeTB.getColumnModel().getColumn(0).setPreferredWidth(1);
+            gradeTB.getColumnModel().getColumn(2).setPreferredWidth(1);
+        }
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 727, Short.MAX_VALUE)
+            .addGap(0, 723, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(information_panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane3)
+                    .addContainerGap()))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 739, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(information_panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(577, Short.MAX_VALUE)))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(169, 169, 169)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(507, Short.MAX_VALUE)))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(232, 232, 232)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(129, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Student Grade", new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-grade-48.png")), jPanel2, "Quản lý kết quả"); // NOI18N
@@ -521,6 +726,75 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_reload_courseActionPerformed
 
+    private void jtf_search1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_search1FocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtf_search1FocusGained
+
+    private void jtf_search1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_search1FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtf_search1FocusLost
+
+    private void jtf_search1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtf_search1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtf_search1ActionPerformed
+
+    private void addBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtn1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addBtn1ActionPerformed
+
+    private void delBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delBtn1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_delBtn1MouseClicked
+
+    private void reloadBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadBtn1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reloadBtn1MouseClicked
+
+    private void gradeTBClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradeTBClicked
+            DefaultTableModel model = (DefaultTableModel) gradeTB.getModel();
+        int selectedRow = gradeTB.getSelectedRow();
+
+        if (selectedRow != -1) {
+            Object enrollmentID = model.getValueAt(selectedRow, 0);
+            Object courseID = model.getValueAt(selectedRow, 1);
+            Object courseName = model.getValueAt(selectedRow, 2);
+            Object studentID = model.getValueAt(selectedRow, 3);
+            Object grade = model.getValueAt(selectedRow, 4);
+
+            txtCourseID1.setText(courseID.toString());
+            txtCourseName1.setText(courseName.toString());
+            txtEnrollmentID.setText(enrollmentID.toString());
+            txtStudentID.setText(studentID.toString());
+            txtGrade.setText(grade.toString());
+        }
+    }//GEN-LAST:event_gradeTBClicked
+
+     public void loadDataIntoGradeTable(){
+        this.studentGBUS.ListStudentGrade();
+        DefaultTableModel model = (DefaultTableModel) gradeTB.getModel();
+        model.setRowCount(0);
+        ArrayList<StudentGradeDTO> listStudentGrade = studentGBUS.getList();
+        for (int i = 0; i < listStudentGrade.size(); i++) {
+            Object[] row = new Object[5];
+            row[0] = listStudentGrade.get(i).getEnrollmentID();
+            row[1] = listStudentGrade.get(i).getCourseID();
+            int courseID = listStudentGrade.get(i).getCourseID();
+            row[2] = courseBUS.GetCourseById(courseID).getTitle();
+            row[3] = listStudentGrade.get(i).getStudentID();
+            row[4] = listStudentGrade.get(i).getGrade();
+            model.addRow(row);
+        }
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        gradeTB.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        gradeTB.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        gradeTB.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+        gradeTB.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+    }  
+    
+    
+    
     private void reloadBtnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
         jtf_search.setText("Search by ID/name");
@@ -724,28 +998,41 @@ public class MainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
+    private javax.swing.JButton addBtn1;
     private javax.swing.JButton btn_addCourse;
     private javax.swing.JButton delBtn;
+    private javax.swing.JButton delBtn1;
+    private javax.swing.JTable gradeTB;
     private javax.swing.JPanel information_panel;
+    private javax.swing.JPanel information_panel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jtf_search;
+    private javax.swing.JTextField jtf_search1;
     private javax.swing.JTextField jtf_searchCourse;
     private javax.swing.JTable mainTbl;
     private javax.swing.JButton reloadBtn;
+    private javax.swing.JButton reloadBtn1;
     private javax.swing.JButton reload_course;
     private javax.swing.JTable tb_course;
     private javax.swing.JTextField txtCourseID;
+    private javax.swing.JTextField txtCourseID1;
     private javax.swing.JTextField txtCourseName;
+    private javax.swing.JTextField txtCourseName1;
     private javax.swing.JTextField txtCredit;
+    private javax.swing.JTextField txtEnrollmentID;
+    private javax.swing.JTextField txtGrade;
     private javax.swing.JTextField txtInstructID;
     private javax.swing.JTextField txtIntructName;
+    private javax.swing.JTextField txtStudentID;
     // End of variables declaration//GEN-END:variables
 }
