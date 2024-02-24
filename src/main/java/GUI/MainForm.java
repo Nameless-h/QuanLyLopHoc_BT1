@@ -8,10 +8,13 @@ import BUS.CourseBUS;
 import BUS.CourseInstructorBUS;
 import BUS.PersonBUS;
 import BUS.StudentGradeBUS;
+import DAO.StudentGradeDAO;
 import DTO.CourseDTO;
 import DTO.CourseInstructorDTO;
 import DTO.StudentGradeDTO;
 import GUI.CourseInstructor.AddInstructorForm;
+import GUI.StudentGrade.AddStudentGrade;
+import GUI.StudentGrade.UpdateStudentGrade;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -41,7 +44,15 @@ public class MainForm extends javax.swing.JFrame {
     private CourseBUS courseBUS;
     private PersonBUS personBUS;
     private StudentGradeBUS studentGBUS;
+    private int studentID; // Khai báo biến studentID trong lớp hiện tại
+    // Hàm setter cho studentID
+    String find = "";
+    public void setStudentID(int studentID) {
+        this.studentID = studentID;
+    }
+    
 
+    StudentGradeDAO dao = new StudentGradeDAO();
     /**
      * Creates new form MainForm
      */
@@ -128,7 +139,7 @@ public class MainForm extends javax.swing.JFrame {
         txtCourseID1 = new javax.swing.JTextField();
         txtStudentID = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
-        jtf_search1 = new javax.swing.JTextField();
+        jtf_searchGrade = new javax.swing.JTextField();
         addBtn1 = new javax.swing.JButton();
         delBtn1 = new javax.swing.JButton();
         reloadBtn1 = new javax.swing.JButton();
@@ -385,26 +396,31 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Action"));
 
-        jtf_search1.setText("Search by ID/name");
-        jtf_search1.setPreferredSize(new java.awt.Dimension(300, 22));
-        jtf_search1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jtf_search1FocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jtf_search1FocusLost(evt);
+        jtf_searchGrade.setText("Search by ID");
+        jtf_searchGrade.setPreferredSize(new java.awt.Dimension(300, 22));
+        jtf_searchGrade.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jtf_searchGradeCaretUpdate(evt);
             }
         });
-        jtf_search1.addActionListener(new java.awt.event.ActionListener() {
+        jtf_searchGrade.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtf_searchGradeFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtf_searchGradeFocusLost(evt);
+            }
+        });
+        jtf_searchGrade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtf_search1ActionPerformed(evt);
+                jtf_searchGradeActionPerformed(evt);
             }
         });
 
         addBtn1.setBackground(new java.awt.Color(0, 204, 255));
         addBtn1.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         addBtn1.setForeground(new java.awt.Color(255, 255, 255));
-        addBtn1.setText("Modify");
+        addBtn1.setText("ADD");
         addBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         addBtn1.setName(""); // NOI18N
@@ -427,6 +443,11 @@ public class MainForm extends javax.swing.JFrame {
                 delBtn1MouseClicked(evt);
             }
         });
+        delBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delBtn1ActionPerformed(evt);
+            }
+        });
 
         reloadBtn1.setBackground(new java.awt.Color(153, 153, 153));
         reloadBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-reload-30.png"))); // NOI18N
@@ -445,7 +466,7 @@ public class MainForm extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jtf_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jtf_searchGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(addBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -459,8 +480,10 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(addBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(delBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(reloadBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(jtf_search1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jtf_searchGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
+
+        addBtn1.getAccessibleContext().setAccessibleName("Add");
 
         gradeTB.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -476,9 +499,16 @@ public class MainForm extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         gradeTB.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -530,8 +560,8 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(232, 232, 232)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(129, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         jTabbedPane1.addTab("Student Grade", new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-grade-48.png")), jPanel2, "Quản lý kết quả"); // NOI18N
@@ -726,20 +756,34 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_reload_courseActionPerformed
 
-    private void jtf_search1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_search1FocusGained
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtf_search1FocusGained
+    private void jtf_searchGradeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchGradeFocusGained
+        if (jtf_searchGrade.getText().equals("Search by ID")) {
+            jtf_searchGrade.setText(null);
+            jtf_searchGrade.requestFocus();
+            System.out.println("");    
+        }
+    }//GEN-LAST:event_jtf_searchGradeFocusGained
 
-    private void jtf_search1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_search1FocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtf_search1FocusLost
+    private void jtf_searchGradeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchGradeFocusLost
+        if (jtf_searchGrade.getText().length() == 0) {
+            addPlaceHolderStyle(jtf_searchGrade);
+            jtf_searchGrade.setText("Search by ID");
+        }
+    }//GEN-LAST:event_jtf_searchGradeFocusLost
 
-    private void jtf_search1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtf_search1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtf_search1ActionPerformed
+    private void jtf_searchGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtf_searchGradeActionPerformed
+          String input = jtf_searchGrade.getText();
+    try {
+        int enrollmentID = Integer.parseInt(input);
+        fillTable1(enrollmentID);
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(null, "Vui lòng nhập số cho Enrollment ID", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_jtf_searchGradeActionPerformed
 
     private void addBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtn1ActionPerformed
-        // TODO add your handling code here:
+        AddStudentGrade add = new AddStudentGrade();
+        add.setVisible(true);
     }//GEN-LAST:event_addBtn1ActionPerformed
 
     private void delBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delBtn1MouseClicked
@@ -747,11 +791,11 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_delBtn1MouseClicked
 
     private void reloadBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadBtn1MouseClicked
-        // TODO add your handling code here:
+        loadDataIntoGradeTable();
     }//GEN-LAST:event_reloadBtn1MouseClicked
 
     private void gradeTBClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradeTBClicked
-            DefaultTableModel model = (DefaultTableModel) gradeTB.getModel();
+        DefaultTableModel model = (DefaultTableModel) gradeTB.getModel();
         int selectedRow = gradeTB.getSelectedRow();
 
         if (selectedRow != -1) {
@@ -767,7 +811,31 @@ public class MainForm extends javax.swing.JFrame {
             txtStudentID.setText(studentID.toString());
             txtGrade.setText(grade.toString());
         }
+        
+        if (evt.getClickCount() == 2) {
+            String courseID = model.getValueAt(selectedRow, 1).toString();
+            String grade = model.getValueAt(selectedRow, 4).toString();
+            String studentId = model.getValueAt(selectedRow, 3).toString();
+            String enrollmentID = model.getValueAt(selectedRow, 0).toString();
+            UpdateStudentGrade update = new UpdateStudentGrade();
+            update.setVisible(true);
+            update.txtStudentID.setText(studentId);
+            update.txtStudentID.setEnabled(false);
+            update.txtGrade.setText(grade);
+            update.txtCourse.setEnabled(false);
+            update.txtCourse.setText(courseID);
+            update.txtEnrollmentID.setText(enrollmentID);
+            update.txtEnrollmentID.setEnabled(false);
+        }
     }//GEN-LAST:event_gradeTBClicked
+
+    private void delBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtn1ActionPerformed
+        showComfirmRemove();
+    }//GEN-LAST:event_delBtn1ActionPerformed
+
+    private void jtf_searchGradeCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jtf_searchGradeCaretUpdate
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtf_searchGradeCaretUpdate
 
      public void loadDataIntoGradeTable(){
         this.studentGBUS.ListStudentGrade();
@@ -934,6 +1002,91 @@ public class MainForm extends javax.swing.JFrame {
         }
     }// GEN-LAST:event_delBtnMouseClicked
 
+     public void fillTable1(int enrollmentID) {
+        DefaultTableModel tblmodel = (DefaultTableModel) gradeTB.getModel();
+        tblmodel.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+        this.studentGBUS.ListStudentGrade();
+        StudentGradeDTO studentGrade = dao.getStudentGradeByEnrollmentID(enrollmentID);
+        if (studentGrade != null) {
+            Object[] data = new Object[5];
+            data[0] = studentGrade.getEnrollmentID();
+            data[1] = studentGrade.getCourseID();
+            int courseID = studentGrade.getCourseID();
+            data[2] = courseBUS.GetCourseById(courseID).getTitle();
+            data[3] = studentGrade.getStudentID();
+            data[4] = studentGrade.getGrade();
+            tblmodel.addRow(data); // Thêm dòng dữ liệu mới vào bảng
+        }
+    }
+    public void fillTable(int enrollmentID){
+        this.studentGBUS.ListStudentGrade();
+        DefaultTableModel tblmodel = (DefaultTableModel) gradeTB.getModel();
+        tblmodel.setRowCount(0);
+        StudentGradeDTO studentGrade = studentGBUS.GetStudentGradeById(enrollmentID);
+        if (studentGrade != null) {
+            Object[] data = new Object[5];
+            data[0] = studentGrade.getEnrollmentID();
+            data[1] = studentGrade.getCourseID();
+            int courseID = studentGrade.getCourseID();
+            data[2] = courseBUS.GetCourseById(courseID).getTitle();
+            data[3] = studentGrade.getStudentID();
+            data[4] = studentGrade.getGrade();
+            tblmodel.addRow(data); 
+        }
+    }
+
+    public void fillTable2(int studentID){
+        this.studentGBUS.ListStudentGrade();
+        DefaultTableModel tblmodel = (DefaultTableModel) gradeTB.getModel();
+        tblmodel.setRowCount(0);
+        StudentGradeDTO studentGrade = studentGBUS.getStudentGradeByStudentID(studentID);
+        if (studentGrade != null) {
+            Object[] data = new Object[5];
+            data[0] = studentGrade.getEnrollmentID();
+            data[1] = studentGrade.getCourseID();
+            int courseID = studentGrade.getCourseID();
+            data[2] = courseBUS.GetCourseById(courseID).getTitle();
+            data[3] = studentGrade.getStudentID();
+            data[4] = studentGrade.getGrade();
+            tblmodel.addRow(data); 
+        }
+    }
+    
+    public void fillTable(){
+        DefaultTableModel tblmodel = (DefaultTableModel)gradeTB.getModel();
+        tblmodel.setRowCount(0);
+        for(StudentGradeDTO std : dao.getAllStudentGrade()){
+            Object data [] = new Object[5];
+            data[0]=std.getEnrollmentID();
+            data[1]=std.getCourseID();
+            int courseID = std.getCourseID();
+            data[2] = courseBUS.GetCourseById(courseID).getTitle();
+            data[3]=std.getStudentID();
+            data[4]=std.getGrade();
+            tblmodel.addRow(data);
+        }
+    }
+   
+    private void showComfirmRemove() {
+        int selectedRow = gradeTB.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel) gradeTB.getModel();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để xoá", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return; 
+            }
+        if (JOptionPane.showConfirmDialog(this, "Bạn chắc chứ?", "Question", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            int enrollmentID = (int) model.getValueAt(selectedRow, 0);
+            StudentGradeBUS bus = new StudentGradeBUS();
+            if (bus.DeleteStudentGrade(enrollmentID)) {
+                JOptionPane.showMessageDialog(this, "Xoá thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "Xoá không thành công");
+            }
+            model.removeRow(selectedRow);
+            fillTable();
+        }
+    }
+    
     private String string;
 
     /**
@@ -1002,7 +1155,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btn_addCourse;
     private javax.swing.JButton delBtn;
     private javax.swing.JButton delBtn1;
-    private javax.swing.JTable gradeTB;
+    public javax.swing.JTable gradeTB;
     private javax.swing.JPanel information_panel;
     private javax.swing.JPanel information_panel1;
     private javax.swing.JPanel jPanel1;
@@ -1017,8 +1170,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jtf_search;
-    private javax.swing.JTextField jtf_search1;
     private javax.swing.JTextField jtf_searchCourse;
+    private javax.swing.JTextField jtf_searchGrade;
     private javax.swing.JTable mainTbl;
     private javax.swing.JButton reloadBtn;
     private javax.swing.JButton reloadBtn1;
