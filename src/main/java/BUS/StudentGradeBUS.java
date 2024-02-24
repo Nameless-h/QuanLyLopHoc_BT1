@@ -23,9 +23,19 @@ public class StudentGradeBUS {
     }
 
     public StudentGradeDTO GetStudentGradeById(int id) {
+//        StudentGradeDAO StudentGradeDAO = new StudentGradeDAO();
         for (StudentGradeDTO s : listStudentGrade) {
             if (s.getEnrollmentID() == id)
                 return s;
+        }
+        return null;
+    }
+    
+     public StudentGradeDTO getStudentGradeByStudentID(int studentID) {
+        for (StudentGradeDTO s : listStudentGrade) {
+            if (s.getStudentID() == studentID) {
+                return s;
+            }
         }
         return null;
     }
@@ -51,4 +61,18 @@ public class StudentGradeBUS {
         }
         return false;
     }
+    
+    public boolean DeleteStudentGrade(int enrollmentID) {
+        StudentGradeDAO studentGradeDAO = new StudentGradeDAO();
+        if (studentGradeDAO.Delete(enrollmentID)) {
+            for (int i = 0; i < this.listStudentGrade.size(); i++) {
+                if (this.listStudentGrade.get(i).getEnrollmentID() == enrollmentID) {
+                    this.listStudentGrade.remove(i);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
