@@ -396,7 +396,7 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Action"));
 
-        jtf_searchGrade.setText("Search by ID");
+        jtf_searchGrade.setText("Search by ID/name");
         jtf_searchGrade.setPreferredSize(new java.awt.Dimension(300, 22));
         jtf_searchGrade.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
@@ -757,7 +757,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_reload_courseActionPerformed
 
     private void jtf_searchGradeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchGradeFocusGained
-        if (jtf_searchGrade.getText().equals("Search by ID")) {
+        if (jtf_searchGrade.getText().equals("Search by ID/name")) {
             jtf_searchGrade.setText(null);
             jtf_searchGrade.requestFocus();
             System.out.println("");    
@@ -767,18 +767,18 @@ public class MainForm extends javax.swing.JFrame {
     private void jtf_searchGradeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchGradeFocusLost
         if (jtf_searchGrade.getText().length() == 0) {
             addPlaceHolderStyle(jtf_searchGrade);
-            jtf_searchGrade.setText("Search by ID");
+            jtf_searchGrade.setText("Search by ID/name");
         }
     }//GEN-LAST:event_jtf_searchGradeFocusLost
 
     private void jtf_searchGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtf_searchGradeActionPerformed
-          String input = jtf_searchGrade.getText();
-    try {
-        int enrollmentID = Integer.parseInt(input);
-        fillTable1(enrollmentID);
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(null, "Vui lòng nhập số cho Enrollment ID", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }
+        String input = jtf_searchGrade.getText();
+        try {
+            int studentID = Integer.parseInt(input);
+            fillTable2(studentID);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập Student ID", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }   
     }//GEN-LAST:event_jtf_searchGradeActionPerformed
 
     private void addBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtn1ActionPerformed
@@ -1039,8 +1039,11 @@ public class MainForm extends javax.swing.JFrame {
         this.studentGBUS.ListStudentGrade();
         DefaultTableModel tblmodel = (DefaultTableModel) gradeTB.getModel();
         tblmodel.setRowCount(0);
-        StudentGradeDTO studentGrade = studentGBUS.getStudentGradeByStudentID(studentID);
-        if (studentGrade != null) {
+        ArrayList<StudentGradeDTO> studentGrades = studentGBUS.getStudentGradesByStudentID(studentID);
+        if (studentGrades.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Không tìm thấy sinh viên có ID " + studentID, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+        for (StudentGradeDTO studentGrade : studentGrades) {
             Object[] data = new Object[5];
             data[0] = studentGrade.getEnrollmentID();
             data[1] = studentGrade.getCourseID();
@@ -1049,6 +1052,7 @@ public class MainForm extends javax.swing.JFrame {
             data[3] = studentGrade.getStudentID();
             data[4] = studentGrade.getGrade();
             tblmodel.addRow(data); 
+        }
         }
     }
     
