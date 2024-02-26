@@ -11,10 +11,12 @@ GUI\MainForm.class
 GUI\CourseInstructor\AddInstructorForm.class
 com\mycompany\quanlylophoc\QuanLyLopHoc.class
 DAO\PersonDAO.class
+GUI\CourseInstructor\AddInstructorForm$6.class
 DTO\OnsiteCourseDTO.class
 GUI\MainForm$6.class
 Database\DBConnection.class
 GUI\CourseInstructor\AddInstructorForm$2.class
+GUI\MainForm$9.class
 BUS\OnsiteCourseBUS.class
 DAO\OnsiteCourseDAO.class
 DTO\PersonDTO.class

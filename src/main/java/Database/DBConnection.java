@@ -44,7 +44,7 @@ public class DBConnection {
         ResultSet rs = null;
         try {
             Connect();
-            Statement st = conn.createStatement();
+            Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(sql);
         } catch (SQLException ex) {
             CustomLogger.CustomLogger(DBConnection.class.getName(), ex.getMessage(), Level.SEVERE);
