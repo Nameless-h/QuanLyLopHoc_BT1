@@ -62,7 +62,7 @@ public class OnlineCourseDAO {
 
     public boolean Set(OnlineCourseDTO c) {
         try {
-            String sql = "UPDATE onblinecourse SET ";
+            String sql = "UPDATE onlinecourse SET ";
             sql += "url = '" + c.getUrl() + "'";
             sql += " WHERE courseID = " + c.getCourseID();
             db.executeUpdate(sql);

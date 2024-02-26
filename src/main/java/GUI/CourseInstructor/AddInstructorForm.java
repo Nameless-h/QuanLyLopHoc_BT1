@@ -237,7 +237,6 @@ public class AddInstructorForm extends javax.swing.JFrame {
 
     private void cbDepartmentActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbDepartmentActionPerformed
         // TODO add your handling code here:
-
     }// GEN-LAST:event_cbDepartmentActionPerformed
 
     private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btSearchActionPerformed

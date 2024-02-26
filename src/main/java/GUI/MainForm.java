@@ -7,14 +7,21 @@ package GUI;
 import BUS.CourseBUS;
 import BUS.CourseInstructorBUS;
 import BUS.PersonBUS;
+import BUS.StudentGradeBUS;
+import DAO.StudentGradeDAO;
+import DTO.CourseDTO;
 import DTO.CourseInstructorDTO;
+import DTO.StudentGradeDTO;
 import GUI.CourseInstructor.AddInstructorForm;
+import GUI.StudentGrade.AddStudentGrade;
+import GUI.StudentGrade.UpdateStudentGrade;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,7 +43,16 @@ public class MainForm extends javax.swing.JFrame {
     private CourseInstructorBUS cour_instrucBUS;
     private CourseBUS courseBUS;
     private PersonBUS personBUS;
+    private StudentGradeBUS studentGBUS;
+    private int studentID; // Khai báo biến studentID trong lớp hiện tại
+    // Hàm setter cho studentID
+    String find = "";
+    public void setStudentID(int studentID) {
+        this.studentID = studentID;
+    }
+    
 
+    StudentGradeDAO dao = new StudentGradeDAO();
     /**
      * Creates new form MainForm
      */
@@ -47,7 +63,11 @@ public class MainForm extends javax.swing.JFrame {
         cour_instrucBUS = new CourseInstructorBUS();
         courseBUS = new CourseBUS();
         personBUS = new PersonBUS();
+        studentGBUS = new StudentGradeBUS();
+        
         loadDataIntoTableModel();
+        loadDataCourse();
+        loadDataIntoGradeTable();
     }
 
     public void addPlaceHolderStyle(JTextField jtf) {
@@ -65,6 +85,8 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     public void loadDataIntoTableModel() {
+        System.out.println("GUI.MainForm.loadDataIntoTableModel()");
+        this.cour_instrucBUS.ListCourseInstructor();
         DefaultTableModel model = (DefaultTableModel) mainTbl.getModel();
         model.setRowCount(0);
         // You can replace this with actual data loading logic from a database or
@@ -72,7 +94,6 @@ public class MainForm extends javax.swing.JFrame {
         cour_instrucBUS.ListCourseInstructor();
         ArrayList<CourseInstructorDTO> listCourse = cour_instrucBUS.getList();
         for (CourseInstructorDTO tmp : listCourse) {
-            System.out.println(tmp.getCourseID());
             model.addRow(new Object[] { tmp.getCourseID(), courseBUS.GetCourseById(tmp.getCourseID()).getTitle(),
                     tmp.getPersonID(), personBUS.GetPersonById(tmp.getPersonID()).getFirstName() + " "
                             + personBUS.GetPersonById(tmp.getPersonID()).getLastName() });
@@ -111,7 +132,27 @@ public class MainForm extends javax.swing.JFrame {
         delBtn = new javax.swing.JButton();
         reloadBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        information_panel1 = new javax.swing.JPanel();
+        txtGrade = new javax.swing.JTextField();
+        txtCourseName1 = new javax.swing.JTextField();
+        txtEnrollmentID = new javax.swing.JTextField();
+        txtCourseID1 = new javax.swing.JTextField();
+        txtStudentID = new javax.swing.JTextField();
+        jPanel7 = new javax.swing.JPanel();
+        jtf_searchGrade = new javax.swing.JTextField();
+        addBtn1 = new javax.swing.JButton();
+        delBtn1 = new javax.swing.JButton();
+        reloadBtn1 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        gradeTB = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jtf_searchCourse = new javax.swing.JTextField();
+        btn_addCourse = new javax.swing.JButton();
+        reload_course = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tb_course = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -179,7 +220,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtCredit, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtCourseName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 202, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
                 .addGroup(information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtIntructName, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtInstructID, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -301,35 +342,346 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Course Instructor", new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-assignment-48.png")), jPanel3, "Quản lý phân công"); // NOI18N
 
+        information_panel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Information"));
+        information_panel1.setName(""); // NOI18N
+
+        txtGrade.setBorder(javax.swing.BorderFactory.createTitledBorder("Grade"));
+
+        txtCourseName1.setBorder(javax.swing.BorderFactory.createTitledBorder("Course name"));
+        txtCourseName1.setPreferredSize(new java.awt.Dimension(69, 40));
+
+        txtEnrollmentID.setBorder(javax.swing.BorderFactory.createTitledBorder("EnrollmentID"));
+        txtEnrollmentID.setPreferredSize(new java.awt.Dimension(69, 40));
+
+        txtCourseID1.setBorder(javax.swing.BorderFactory.createTitledBorder("Course ID"));
+
+        txtStudentID.setBorder(javax.swing.BorderFactory.createTitledBorder("Student ID"));
+
+        javax.swing.GroupLayout information_panel1Layout = new javax.swing.GroupLayout(information_panel1);
+        information_panel1.setLayout(information_panel1Layout);
+        information_panel1Layout.setHorizontalGroup(
+            information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(information_panel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCourseID1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCourseName1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGroup(information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtStudentID, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                    .addComponent(txtEnrollmentID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(82, 82, 82)
+                .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+        );
+        information_panel1Layout.setVerticalGroup(
+            information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(information_panel1Layout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addGroup(information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCourseID1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(information_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCourseName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEnrollmentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Action"));
+
+        jtf_searchGrade.setText("Search by ID/name");
+        jtf_searchGrade.setPreferredSize(new java.awt.Dimension(300, 22));
+        jtf_searchGrade.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jtf_searchGradeCaretUpdate(evt);
+            }
+        });
+        jtf_searchGrade.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtf_searchGradeFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtf_searchGradeFocusLost(evt);
+            }
+        });
+        jtf_searchGrade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtf_searchGradeActionPerformed(evt);
+            }
+        });
+
+        addBtn1.setBackground(new java.awt.Color(0, 204, 255));
+        addBtn1.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        addBtn1.setForeground(new java.awt.Color(255, 255, 255));
+        addBtn1.setText("ADD");
+        addBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        addBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        addBtn1.setName(""); // NOI18N
+        addBtn1.setPreferredSize(new java.awt.Dimension(80, 40));
+        addBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addBtn1ActionPerformed(evt);
+            }
+        });
+
+        delBtn1.setBackground(new java.awt.Color(255, 0, 0));
+        delBtn1.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        delBtn1.setForeground(new java.awt.Color(255, 255, 255));
+        delBtn1.setText("Delete");
+        delBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        delBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        delBtn1.setPreferredSize(new java.awt.Dimension(80, 40));
+        delBtn1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                delBtn1MouseClicked(evt);
+            }
+        });
+        delBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delBtn1ActionPerformed(evt);
+            }
+        });
+
+        reloadBtn1.setBackground(new java.awt.Color(153, 153, 153));
+        reloadBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-reload-30.png"))); // NOI18N
+        reloadBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reloadBtn1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        reloadBtn1.setPreferredSize(new java.awt.Dimension(40, 40));
+        reloadBtn1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reloadBtn1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jtf_searchGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(delBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(reloadBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(addBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(delBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(reloadBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jtf_searchGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        addBtn1.getAccessibleContext().setAccessibleName("Add");
+
+        gradeTB.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "EnrollmentID", "Course ID", "Course Name", "Student ID", "Grade"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        gradeTB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                gradeTBClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(gradeTB);
+        gradeTB.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (gradeTB.getColumnModel().getColumnCount() > 0) {
+            gradeTB.getColumnModel().getColumn(0).setPreferredWidth(1);
+            gradeTB.getColumnModel().getColumn(2).setPreferredWidth(1);
+        }
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 721, Short.MAX_VALUE)
+            .addGap(0, 723, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(information_panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane3)
+                    .addContainerGap()))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 613, Short.MAX_VALUE)
+            .addGap(0, 739, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(information_panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(577, Short.MAX_VALUE)))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(169, 169, 169)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(507, Short.MAX_VALUE)))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(232, 232, 232)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         jTabbedPane1.addTab("Student Grade", new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-grade-48.png")), jPanel2, "Quản lý kết quả"); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 721, Short.MAX_VALUE)
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(242, 242, 242), 5));
+        jPanel6.setLayout(new java.awt.BorderLayout(10, 10));
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Action", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 14))); // NOI18N
+        jPanel5.setPreferredSize(new java.awt.Dimension(408, 80));
+
+        jtf_searchCourse.setText("Search by ID/name");
+        jtf_searchCourse.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtf_searchCourseFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtf_searchCourseFocusLost(evt);
+            }
+        });
+        jtf_searchCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtf_searchCourseActionPerformed(evt);
+            }
+        });
+
+        btn_addCourse.setBackground(new java.awt.Color(51, 204, 255));
+        btn_addCourse.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_addCourse.setForeground(new java.awt.Color(255, 255, 255));
+        btn_addCourse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_addCourse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn_addCourse.setLabel("Add");
+        btn_addCourse.setName(""); // NOI18N
+        btn_addCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_addCourseActionPerformed(evt);
+            }
+        });
+
+        reload_course.setBackground(new java.awt.Color(153, 153, 153));
+        reload_course.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-reload-30.png"))); // NOI18N
+        reload_course.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reload_course.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        reload_course.setPreferredSize(new java.awt.Dimension(40, 40));
+        reload_course.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reload_courseMouseClicked(evt);
+            }
+        });
+        reload_course.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reload_courseActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jtf_searchCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 264, Short.MAX_VALUE)
+                .addComponent(btn_addCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(reload_course, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 613, Short.MAX_VALUE)
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jtf_searchCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 13, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(reload_course, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_addCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel6.add(jPanel5, java.awt.BorderLayout.NORTH);
+
+        tb_course.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Course ID", "Title", "Credits", "Department ID "
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tb_course.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tb_courseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tb_course);
+
+        jPanel6.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        jPanel1.add(jPanel6, java.awt.BorderLayout.CENTER);
 
         jTabbedPane1.addTab("Courses", new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-course-48.png")), jPanel1, "Quản lý khóa học"); // NOI18N
 
@@ -339,6 +691,178 @@ public class MainForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tb_courseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_courseClicked
+        if (evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2) {
+            String id = tb_course.getValueAt(tb_course.getSelectedRow(), 0).toString();
+            new FormCourse(id,"show",tb_course);
+        }
+    }//GEN-LAST:event_tb_courseClicked
+
+    private void jtf_searchCourseFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchCourseFocusGained
+        if (jtf_searchCourse.getText().equals("Search by ID/name")) {
+            jtf_searchCourse.setText(null);
+            jtf_searchCourse.requestFocus();
+            System.out.println("");    
+        }
+    }//GEN-LAST:event_jtf_searchCourseFocusGained
+
+    private void jtf_searchCourseFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchCourseFocusLost
+        if (jtf_searchCourse.getText().length() == 0) {
+            addPlaceHolderStyle(jtf_searchCourse);
+            jtf_searchCourse.setText("Search by ID/name");
+        }
+    }//GEN-LAST:event_jtf_searchCourseFocusLost
+
+    private void jtf_searchCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtf_searchCourseActionPerformed
+           // TODO add your handling code here:
+        String input = jtf_searchCourse.getText().toLowerCase().trim();
+        DefaultTableModel model = (DefaultTableModel) tb_course.getModel();
+        model.setRowCount(0);
+        // You can replace this with actual data loading logic from a database or
+        // another source
+        ArrayList<CourseDTO> listCourse = courseBUS.getList();
+        for (CourseDTO tmp : listCourse) {
+            String course_title = tmp.getTitle();
+            String credit = tmp.getCredits();
+            String course_id = Integer.toString(tmp.getCourseID());
+            String department_id = Integer.toString(tmp.getDepartmentID());
+            
+
+            if (course_title.toLowerCase().contains(input) ||
+                    credit.toLowerCase().contains(input) ||
+                    course_id.contains(input) ||
+                    department_id.contains(input)) {
+                model.addRow(new Object[] { tmp.getCourseID(), tmp.getTitle(), tmp.getCredits(), tmp.getDepartmentID() });
+            }
+        }
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tb_course.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        tb_course.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        tb_course.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+    }//GEN-LAST:event_jtf_searchCourseActionPerformed
+
+    private void btn_addCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addCourseActionPerformed
+        new FormCourse(" ", "add", tb_course);
+    }//GEN-LAST:event_btn_addCourseActionPerformed
+
+    private void reload_courseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reload_courseMouseClicked
+        jtf_searchCourse.setText("Search by ID/name");
+        addPlaceHolderStyle(jtf_searchCourse);
+        loadDataCourse();
+    }//GEN-LAST:event_reload_courseMouseClicked
+
+    private void reload_courseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reload_courseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reload_courseActionPerformed
+
+    private void jtf_searchGradeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchGradeFocusGained
+        if (jtf_searchGrade.getText().equals("Search by ID/name")) {
+            jtf_searchGrade.setText(null);
+            jtf_searchGrade.requestFocus();
+            System.out.println("");    
+        }
+    }//GEN-LAST:event_jtf_searchGradeFocusGained
+
+    private void jtf_searchGradeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtf_searchGradeFocusLost
+        if (jtf_searchGrade.getText().length() == 0) {
+            addPlaceHolderStyle(jtf_searchGrade);
+            jtf_searchGrade.setText("Search by ID/name");
+        }
+    }//GEN-LAST:event_jtf_searchGradeFocusLost
+
+    private void jtf_searchGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtf_searchGradeActionPerformed
+        String input = jtf_searchGrade.getText();
+        try {
+            int studentID = Integer.parseInt(input);
+            fillTable2(studentID);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập Student ID", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }   
+    }//GEN-LAST:event_jtf_searchGradeActionPerformed
+
+    private void addBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtn1ActionPerformed
+        AddStudentGrade add = new AddStudentGrade();
+        add.setVisible(true);
+    }//GEN-LAST:event_addBtn1ActionPerformed
+
+    private void delBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delBtn1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_delBtn1MouseClicked
+
+    private void reloadBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reloadBtn1MouseClicked
+        loadDataIntoGradeTable();
+    }//GEN-LAST:event_reloadBtn1MouseClicked
+
+    private void gradeTBClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradeTBClicked
+        DefaultTableModel model = (DefaultTableModel) gradeTB.getModel();
+        int selectedRow = gradeTB.getSelectedRow();
+
+        if (selectedRow != -1) {
+            Object enrollmentID = model.getValueAt(selectedRow, 0);
+            Object courseID = model.getValueAt(selectedRow, 1);
+            Object courseName = model.getValueAt(selectedRow, 2);
+            Object studentID = model.getValueAt(selectedRow, 3);
+            Object grade = model.getValueAt(selectedRow, 4);
+
+            txtCourseID1.setText(courseID.toString());
+            txtCourseName1.setText(courseName.toString());
+            txtEnrollmentID.setText(enrollmentID.toString());
+            txtStudentID.setText(studentID.toString());
+            txtGrade.setText(grade.toString());
+        }
+        
+        if (evt.getClickCount() == 2) {
+            String courseID = model.getValueAt(selectedRow, 1).toString();
+            String grade = model.getValueAt(selectedRow, 4).toString();
+            String studentId = model.getValueAt(selectedRow, 3).toString();
+            String enrollmentID = model.getValueAt(selectedRow, 0).toString();
+            UpdateStudentGrade update = new UpdateStudentGrade();
+            update.setVisible(true);
+            update.txtStudentID.setText(studentId);
+            update.txtStudentID.setEnabled(false);
+            update.txtGrade.setText(grade);
+            update.txtCourse.setEnabled(false);
+            update.txtCourse.setText(courseID);
+            update.txtEnrollmentID.setText(enrollmentID);
+            update.txtEnrollmentID.setEnabled(false);
+        }
+    }//GEN-LAST:event_gradeTBClicked
+
+    private void delBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delBtn1ActionPerformed
+        showComfirmRemove();
+    }//GEN-LAST:event_delBtn1ActionPerformed
+
+    private void jtf_searchGradeCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jtf_searchGradeCaretUpdate
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtf_searchGradeCaretUpdate
+
+     public void loadDataIntoGradeTable(){
+        this.studentGBUS.ListStudentGrade();
+        DefaultTableModel model = (DefaultTableModel) gradeTB.getModel();
+        model.setRowCount(0);
+        ArrayList<StudentGradeDTO> listStudentGrade = studentGBUS.getList();
+        for (int i = 0; i < listStudentGrade.size(); i++) {
+            Object[] row = new Object[5];
+            row[0] = listStudentGrade.get(i).getEnrollmentID();
+            row[1] = listStudentGrade.get(i).getCourseID();
+            int courseID = listStudentGrade.get(i).getCourseID();
+            row[2] = courseBUS.GetCourseById(courseID).getTitle();
+            row[3] = listStudentGrade.get(i).getStudentID();
+            row[4] = listStudentGrade.get(i).getGrade();
+            model.addRow(row);
+        }
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        gradeTB.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        gradeTB.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        gradeTB.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+        gradeTB.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+    }  
+    
+    
+    
     private void reloadBtnMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
         jtf_search.setText("Search by ID/name");
@@ -354,6 +878,7 @@ public class MainForm extends javax.swing.JFrame {
 
             };
         });
+        
     }// GEN-LAST:event_addBtnActionPerformed
 
     private void mainTblClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_mainTblClicked
@@ -374,7 +899,35 @@ public class MainForm extends javax.swing.JFrame {
             txtIntructName.setText(personName.toString());
         }
     }// GEN-LAST:event_mainTblClicked
-
+    public void loadDataCourse(){
+        DefaultTableModel model = (DefaultTableModel) tb_course.getModel();
+        model.setRowCount(0);
+        ArrayList<CourseDTO> listCourse = courseBUS.getList();
+        for (CourseDTO tmp : listCourse) {
+            System.out.println(tmp.getCourseID());
+            model.addRow(new Object[]{tmp.getCourseID(), tmp.getTitle(), tmp.getCredits(), tmp.getDepartmentID()});
+        }
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tb_course.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        tb_course.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        tb_course.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+    }
+    public static void loadDataCourse2(JTable tb_course){
+        DefaultTableModel model = (DefaultTableModel) tb_course.getModel();
+        model.setRowCount(0);
+        CourseBUS courseBUS = new CourseBUS(); 
+        ArrayList<CourseDTO> listCourse = courseBUS.getList();
+        for (CourseDTO tmp : listCourse) {
+            System.out.println(tmp.getCourseID());
+            model.addRow(new Object[]{tmp.getCourseID(), tmp.getTitle(), tmp.getCredits(), tmp.getDepartmentID()});
+        }
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tb_course.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        tb_course.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        tb_course.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+    }
     private void jtf_searchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jtf_searchActionPerformed
         // TODO add your handling code here:
         String input = jtf_search.getText().toLowerCase().trim();
@@ -449,6 +1002,95 @@ public class MainForm extends javax.swing.JFrame {
         }
     }// GEN-LAST:event_delBtnMouseClicked
 
+     public void fillTable1(int enrollmentID) {
+        DefaultTableModel tblmodel = (DefaultTableModel) gradeTB.getModel();
+        tblmodel.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+        this.studentGBUS.ListStudentGrade();
+        StudentGradeDTO studentGrade = dao.getStudentGradeByEnrollmentID(enrollmentID);
+        if (studentGrade != null) {
+            Object[] data = new Object[5];
+            data[0] = studentGrade.getEnrollmentID();
+            data[1] = studentGrade.getCourseID();
+            int courseID = studentGrade.getCourseID();
+            data[2] = courseBUS.GetCourseById(courseID).getTitle();
+            data[3] = studentGrade.getStudentID();
+            data[4] = studentGrade.getGrade();
+            tblmodel.addRow(data); // Thêm dòng dữ liệu mới vào bảng
+        }
+    }
+    public void fillTable(int enrollmentID){
+        this.studentGBUS.ListStudentGrade();
+        DefaultTableModel tblmodel = (DefaultTableModel) gradeTB.getModel();
+        tblmodel.setRowCount(0);
+        StudentGradeDTO studentGrade = studentGBUS.GetStudentGradeById(enrollmentID);
+        if (studentGrade != null) {
+            Object[] data = new Object[5];
+            data[0] = studentGrade.getEnrollmentID();
+            data[1] = studentGrade.getCourseID();
+            int courseID = studentGrade.getCourseID();
+            data[2] = courseBUS.GetCourseById(courseID).getTitle();
+            data[3] = studentGrade.getStudentID();
+            data[4] = studentGrade.getGrade();
+            tblmodel.addRow(data); 
+        }
+    }
+
+    public void fillTable2(int studentID){
+        this.studentGBUS.ListStudentGrade();
+        DefaultTableModel tblmodel = (DefaultTableModel) gradeTB.getModel();
+        tblmodel.setRowCount(0);
+        ArrayList<StudentGradeDTO> studentGrades = studentGBUS.getStudentGradesByStudentID(studentID);
+        if (studentGrades.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Không tìm thấy sinh viên có ID " + studentID, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+        for (StudentGradeDTO studentGrade : studentGrades) {
+            Object[] data = new Object[5];
+            data[0] = studentGrade.getEnrollmentID();
+            data[1] = studentGrade.getCourseID();
+            int courseID = studentGrade.getCourseID();
+            data[2] = courseBUS.GetCourseById(courseID).getTitle();
+            data[3] = studentGrade.getStudentID();
+            data[4] = studentGrade.getGrade();
+            tblmodel.addRow(data); 
+        }
+        }
+    }
+    
+    public void fillTable(){
+        DefaultTableModel tblmodel = (DefaultTableModel)gradeTB.getModel();
+        tblmodel.setRowCount(0);
+        for(StudentGradeDTO std : dao.getAllStudentGrade()){
+            Object data [] = new Object[5];
+            data[0]=std.getEnrollmentID();
+            data[1]=std.getCourseID();
+            int courseID = std.getCourseID();
+            data[2] = courseBUS.GetCourseById(courseID).getTitle();
+            data[3]=std.getStudentID();
+            data[4]=std.getGrade();
+            tblmodel.addRow(data);
+        }
+    }
+   
+    private void showComfirmRemove() {
+        int selectedRow = gradeTB.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel) gradeTB.getModel();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để xoá", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return; 
+            }
+        if (JOptionPane.showConfirmDialog(this, "Bạn chắc chứ?", "Question", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            int enrollmentID = (int) model.getValueAt(selectedRow, 0);
+            StudentGradeBUS bus = new StudentGradeBUS();
+            if (bus.DeleteStudentGrade(enrollmentID)) {
+                JOptionPane.showMessageDialog(this, "Xoá thành công");
+            } else {
+                JOptionPane.showMessageDialog(this, "Xoá không thành công");
+            }
+            model.removeRow(selectedRow);
+            fillTable();
+        }
+    }
+    
     private String string;
 
     /**
@@ -513,21 +1155,41 @@ public class MainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
+    private javax.swing.JButton addBtn1;
+    private javax.swing.JButton btn_addCourse;
     private javax.swing.JButton delBtn;
+    private javax.swing.JButton delBtn1;
+    public javax.swing.JTable gradeTB;
     private javax.swing.JPanel information_panel;
+    private javax.swing.JPanel information_panel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jtf_search;
+    private javax.swing.JTextField jtf_searchCourse;
+    private javax.swing.JTextField jtf_searchGrade;
     private javax.swing.JTable mainTbl;
     private javax.swing.JButton reloadBtn;
+    private javax.swing.JButton reloadBtn1;
+    private javax.swing.JButton reload_course;
+    private javax.swing.JTable tb_course;
     private javax.swing.JTextField txtCourseID;
+    private javax.swing.JTextField txtCourseID1;
     private javax.swing.JTextField txtCourseName;
+    private javax.swing.JTextField txtCourseName1;
     private javax.swing.JTextField txtCredit;
+    private javax.swing.JTextField txtEnrollmentID;
+    private javax.swing.JTextField txtGrade;
     private javax.swing.JTextField txtInstructID;
     private javax.swing.JTextField txtIntructName;
+    private javax.swing.JTextField txtStudentID;
     // End of variables declaration//GEN-END:variables
 }
