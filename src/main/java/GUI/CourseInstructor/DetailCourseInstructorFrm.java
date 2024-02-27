@@ -6,6 +6,7 @@ package GUI.CourseInstructor;
 
 import DTO.CourseDTO;
 import DTO.PersonDTO;
+import javax.swing.JFrame;
 
 /**
  *
@@ -22,6 +23,7 @@ public class DetailCourseInstructorFrm extends javax.swing.JFrame {
 
     public DetailCourseInstructorFrm(PersonDTO instructor, CourseDTO course) {
         initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         txtCourseid.setText(String.valueOf(course.getCourseID()));
         txtCoursename.setText(course.getTitle());
         txtCredit.setText(course.getCredits());
