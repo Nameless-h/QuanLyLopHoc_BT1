@@ -23,7 +23,6 @@ public class PersonDTO {
         this.hireDate = hireDate;
         this.enrollmentDate = enrollmentDate;
     }
-
     public PersonDTO() {
         this.personID = 0;
         this.lastName = "";
