@@ -21,6 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -36,6 +39,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
     DepartmentBUS departmentBUS = new DepartmentBUS();
     CourseInstructorBUS instuctorBUS = new CourseInstructorBUS();
     MainForm parent;
+    private boolean isChanged = false;
 
     /**
      * Creates new form ThemPhanCongForm
@@ -82,8 +86,14 @@ public class AddInstructorForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Modify");
         setBackground(new java.awt.Color(255, 255, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setLocation(new java.awt.Point(450, 100));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Instructor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Roboto", 0, 14))); // NOI18N
@@ -226,6 +236,22 @@ public class AddInstructorForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        if(isChanged == true) {
+            int res = JOptionPane.showConfirmDialog(null, "Do you want to save changes!", "Warning!",
+                    JOptionPane.YES_NO_CANCEL_OPTION);
+            if(res == JOptionPane.CANCEL_OPTION) {
+                System.out.println("GUI.CourseInstructor.AddInstructorForm.formWindowClosing()");
+               this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+            } else if(res == JOptionPane.YES_OPTION) {
+                SaveButton();
+                this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            } else 
+               this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
     private void cbPersonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbPersonActionPerformed
         // TODO add your handling code here:
         Object selectedValue = cbPerson.getSelectedItem();
@@ -251,8 +277,7 @@ public class AddInstructorForm extends javax.swing.JFrame {
         }
     }// GEN-LAST:event_btSearchActionPerformed
 
-    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btSaveActionPerformed
-        // TODO add your handling code here:
+    private void SaveButton() {
         Object selectedValue = cbPerson.getSelectedItem();
         if (selectedValue != null && selectedValue instanceof Object[]) {
             Object[] pair = (Object[]) selectedValue;
@@ -273,8 +298,14 @@ public class AddInstructorForm extends javax.swing.JFrame {
                 }
             }
             this.parent.loadDataIntoTableModel();
+            this.isChanged = false;
             JOptionPane.showMessageDialog(this, "Update Successful", "Notificatioin", 1);
         }
+    }
+    
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btSaveActionPerformed
+        // TODO add your handling code here:
+        SaveButton();
     }// GEN-LAST:event_btSaveActionPerformed
 
     public void addPlaceHolderStyle(JTextField jtf) {
@@ -367,8 +398,19 @@ public class AddInstructorForm extends javax.swing.JFrame {
 
         colmodel.getColumn(1).setCellRenderer(centerRenderer);
         colmodel.getColumn(3).setCellRenderer(centerRenderer);
+        
+        tb.getModel().addTableModelListener(new TableModelListener(){
+            public void tableChanged(TableModelEvent e) {
+                 if(e.getColumn() == 0) {
+                     SetChanged(true);
+                 }
+            }
+        });
     }
 
+    public void SetChanged(boolean b) {
+        this.isChanged = b;
+    }
     /**
      * @param args the command line arguments
      */

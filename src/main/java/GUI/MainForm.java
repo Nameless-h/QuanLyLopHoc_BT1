@@ -120,12 +120,6 @@ public class MainForm extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         mainTbl = new javax.swing.JTable();
-        information_panel = new javax.swing.JPanel();
-        txtInstructID = new javax.swing.JTextField();
-        txtCourseName = new javax.swing.JTextField();
-        txtIntructName = new javax.swing.JTextField();
-        txtCourseID = new javax.swing.JTextField();
-        txtCredit = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jtf_search = new javax.swing.JTextField();
         addBtn = new javax.swing.JButton();
@@ -193,56 +187,6 @@ public class MainForm extends javax.swing.JFrame {
             mainTbl.getColumnModel().getColumn(2).setPreferredWidth(1);
         }
 
-        information_panel.setBorder(javax.swing.BorderFactory.createTitledBorder("Information"));
-        information_panel.setName(""); // NOI18N
-
-        txtInstructID.setBorder(javax.swing.BorderFactory.createTitledBorder("Instructor ID"));
-
-        txtCourseName.setBorder(javax.swing.BorderFactory.createTitledBorder("Course name"));
-        txtCourseName.setPreferredSize(new java.awt.Dimension(69, 40));
-
-        txtIntructName.setBorder(javax.swing.BorderFactory.createTitledBorder("Instructor name"));
-        txtIntructName.setPreferredSize(new java.awt.Dimension(69, 40));
-
-        txtCourseID.setBorder(javax.swing.BorderFactory.createTitledBorder("Course ID"));
-
-        txtCredit.setBorder(javax.swing.BorderFactory.createTitledBorder("Credit"));
-
-        javax.swing.GroupLayout information_panelLayout = new javax.swing.GroupLayout(information_panel);
-        information_panel.setLayout(information_panelLayout);
-        information_panelLayout.setHorizontalGroup(
-            information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(information_panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(information_panelLayout.createSequentialGroup()
-                        .addComponent(txtCourseID, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtCredit, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtCourseName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
-                .addGroup(information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtIntructName, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtInstructID, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
-        );
-        information_panelLayout.setVerticalGroup(
-            information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(information_panelLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtInstructID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCourseID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCredit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
-                .addGroup(information_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtCourseName, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtIntructName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-
-        information_panelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtCourseName, txtIntructName});
-
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Action"));
 
         jtf_search.setText("Search by ID/name");
@@ -306,7 +250,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jtf_search, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 183, Short.MAX_VALUE)
                 .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(delBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -330,19 +274,16 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(information_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(information_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -882,22 +823,22 @@ public class MainForm extends javax.swing.JFrame {
     }// GEN-LAST:event_addBtnActionPerformed
 
     private void mainTblClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_mainTblClicked
-        DefaultTableModel model = (DefaultTableModel) mainTbl.getModel();
-        int selectedRow = mainTbl.getSelectedRow();
-
-        // Check if a valid cell is clicked
-        if (selectedRow != -1) {
-            Object courseID = model.getValueAt(selectedRow, 0);
-            Object courseName = model.getValueAt(selectedRow, 1);
-            Object personID = model.getValueAt(selectedRow, 2);
-            Object personName = model.getValueAt(selectedRow, 3);
-
-            txtCourseID.setText(courseID.toString());
-            txtCourseName.setText(courseName.toString());
-            txtCredit.setText(courseBUS.GetCourseById((int) courseID).getCredits());
-            txtInstructID.setText(personID.toString());
-            txtIntructName.setText(personName.toString());
-        }
+//        DefaultTableModel model = (DefaultTableModel) mainTbl.getModel();
+//        int selectedRow = mainTbl.getSelectedRow();
+//
+//        // Check if a valid cell is clicked
+//        if (selectedRow != -1) {
+//            Object courseID = model.getValueAt(selectedRow, 0);
+//            Object courseName = model.getValueAt(selectedRow, 1);
+//            Object personID = model.getValueAt(selectedRow, 2);
+//            Object personName = model.getValueAt(selectedRow, 3);
+//
+//            txtCourseID.setText(courseID.toString());
+//            txtCourseName.setText(courseName.toString());
+//            txtCredit.setText(courseBUS.GetCourseById((int) courseID).getCredits());
+//            txtInstructID.setText(personID.toString());
+//            txtIntructName.setText(personName.toString());
+//        }
     }// GEN-LAST:event_mainTblClicked
     public void loadDataCourse(){
         DefaultTableModel model = (DefaultTableModel) tb_course.getModel();
@@ -1160,7 +1101,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton delBtn;
     private javax.swing.JButton delBtn1;
     public javax.swing.JTable gradeTB;
-    private javax.swing.JPanel information_panel;
     private javax.swing.JPanel information_panel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1181,15 +1121,10 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton reloadBtn1;
     private javax.swing.JButton reload_course;
     private javax.swing.JTable tb_course;
-    private javax.swing.JTextField txtCourseID;
     private javax.swing.JTextField txtCourseID1;
-    private javax.swing.JTextField txtCourseName;
     private javax.swing.JTextField txtCourseName1;
-    private javax.swing.JTextField txtCredit;
     private javax.swing.JTextField txtEnrollmentID;
     private javax.swing.JTextField txtGrade;
-    private javax.swing.JTextField txtInstructID;
-    private javax.swing.JTextField txtIntructName;
     private javax.swing.JTextField txtStudentID;
     // End of variables declaration//GEN-END:variables
 }
