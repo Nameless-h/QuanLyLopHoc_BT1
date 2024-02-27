@@ -775,12 +775,12 @@ public class MainForm extends javax.swing.JFrame {
     }// GEN-LAST:event_addBtnActionPerformed
 
     private void mainTblClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_mainTblClicked\
-        System.out.println("asd");
         DefaultTableModel model = (DefaultTableModel) mainTbl.getModel();
         int selectedRow = mainTbl.getSelectedRow();
 
         // Check if a valid cell is clicked
-        if (selectedRow != -1) {
+        if (selectedRow != -1 && evt.getClickCount() == 2) {
+
             Object courseID = model.getValueAt(selectedRow, 0);
             Object courseName = model.getValueAt(selectedRow, 1);
             Object personID = model.getValueAt(selectedRow, 2);

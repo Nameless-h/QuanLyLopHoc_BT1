@@ -239,7 +239,7 @@ public class FormCourse extends javax.swing.JFrame {
         panel_btn.setBackground(new java.awt.Color(255, 255, 255));
         panel_btn.setPreferredSize(new java.awt.Dimension(150, 75));
 
-        jButton1.setBackground(new java.awt.Color(255, 51, 102));
+        jButton1.setBackground(new java.awt.Color(0, 204, 51));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("SAVE");
