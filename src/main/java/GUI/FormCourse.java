@@ -48,7 +48,8 @@ public class FormCourse extends javax.swing.JFrame {
             renderDataFormShow(id);
         }
         else{
-            txt_url.setEditable(false);
+            /*txt_url.setEditable(false);*/
+            jcb_onsite.setEnabled(false);
             txt_Location.setEditable(false);
             txt_Time.setEditable(false);
             txt_Days.setEditable(false);
@@ -396,8 +397,12 @@ public class FormCourse extends javax.swing.JFrame {
     private void jcb_OnlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcb_OnlineActionPerformed
         if(jcb_Online.isSelected()){
             txt_url.setEditable(true);
+            jcb_onsite.setEnabled(false);
         }
-        else txt_url.setEditable(false); 
+        else{
+            txt_url.setEditable(false);
+            jcb_onsite.setEnabled(true);
+        } 
     }//GEN-LAST:event_jcb_OnlineActionPerformed
 
     private void jcb_onsiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcb_onsiteActionPerformed
@@ -405,15 +410,20 @@ public class FormCourse extends javax.swing.JFrame {
             txt_Location.setEditable(true);
             txt_Time.setEditable(true);
             txt_Days.setEditable(true);
+            jcb_Online.setSelected(false);
+            jcb_Online.setEnabled(false);
         }
         else{    
             txt_Location.setEditable(false);
             txt_Time.setEditable(false);
             txt_Days.setEditable(false);
+            jcb_Online.setEnabled(true);
         }
     }//GEN-LAST:event_jcb_onsiteActionPerformed
     public void renderDataFormShow(String id){
         setTitle("Thông tin khóa học");  
+        jcb_Online.setEnabled(false);
+        jcb_onsite.setEnabled(false);
         CourseDTO x = courseBUS.GetCourseById(Integer.parseInt(id));
         txt_courseID.setText(x.getCourseID()+"");
         txt_title.setText(x.getTitle());
@@ -450,7 +460,8 @@ public class FormCourse extends javax.swing.JFrame {
             jcb_deparmentID.addItem(x.getDepartmentID()+"");
         }
         txt_courseID.setText(courseBUS.getList().size()+1+"");
-        
+        jcb_Online.setSelected(true);
+        jcb_onsite.setSelected(false);
     }
     public void loadDepartmentid(String key){
         ArrayList<DepartmentDTO> listDPid= departmentBUS.getList(); 
