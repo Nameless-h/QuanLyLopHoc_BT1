@@ -89,8 +89,6 @@ public class StudentGradeDAO {
         }
     }
     
-    
-    
     public boolean Delete(int enrollmentID) {
     try {
         String sql = "DELETE FROM studentgrade WHERE enrollmentID = " + enrollmentID;

@@ -6,6 +6,7 @@ package GUI.StudentGrade;
 
 import BUS.CourseBUS;
 import BUS.StudentGradeBUS;
+import BUS.PersonBUS;
 import DAO.CourseDAO;
 import DAO.PersonDAO;
 import DAO.StudentGradeDAO;
@@ -28,6 +29,7 @@ public class AddStudentGrade extends javax.swing.JFrame {
     StudentGradeBUS stdb ;
     private CourseBUS courseBUS;
     private StudentGradeBUS studentGBUS;
+    private PersonBUS personBUS;
     private MainForm mainForm;
     StudentGradeDAO dao = new StudentGradeDAO();
     /**
@@ -201,13 +203,16 @@ public class AddStudentGrade extends javax.swing.JFrame {
         tblmodel.setRowCount(0);
         ArrayList<StudentGradeDTO> listStudentGrade = studentGBUS.getList();
         for (int i = 0; i < listStudentGrade.size(); i++) {
-            Object[] row = new Object[5];
+            Object[] row = new Object[6];
             row[0] = listStudentGrade.get(i).getEnrollmentID();
             row[1] = listStudentGrade.get(i).getCourseID();
             int courseID = listStudentGrade.get(i).getCourseID();
             row[2] = courseBUS.GetCourseById(courseID).getTitle();
             row[3] = listStudentGrade.get(i).getStudentID();
-            row[4] = listStudentGrade.get(i).getGrade();
+            int personID = listStudentGrade.get(i).getStudentID();
+            String personName = personBUS.GetPersonById(personID).getFirstName() + " " + personBUS.GetPersonById(personID).getLastName();
+            row[4] = personName;
+            row[5] = listStudentGrade.get(i).getGrade();
             tblmodel.addRow(row);
         }
     }
@@ -217,13 +222,16 @@ public class AddStudentGrade extends javax.swing.JFrame {
         model.setRowCount(0);
         ArrayList<StudentGradeDTO> listStudentGrade = studentGBUS.getList();
         for (int i = 0; i < listStudentGrade.size(); i++) {
-            Object[] row = new Object[5];
+            Object[] row = new Object[6];
             row[0] = listStudentGrade.get(i).getEnrollmentID();
             row[1] = listStudentGrade.get(i).getCourseID();
             int courseID = listStudentGrade.get(i).getCourseID();
             row[2] = courseBUS.GetCourseById(courseID).getTitle();
             row[3] = listStudentGrade.get(i).getStudentID();
-            row[4] = listStudentGrade.get(i).getGrade();
+            int personID = listStudentGrade.get(i).getStudentID();
+            String personName = personBUS.GetPersonById(personID).getFirstName() + " " + personBUS.GetPersonById(personID).getLastName();
+            row[4] = personName;
+            row[5] = listStudentGrade.get(i).getGrade();
             model.addRow(row);
         }
 

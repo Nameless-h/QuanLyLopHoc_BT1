@@ -1,7 +1,6 @@
 package BUS;
 
 import java.util.ArrayList;
-
 import DAO.StudentGradeDAO;
 import DTO.StudentGradeDTO;
 
@@ -23,7 +22,6 @@ public class StudentGradeBUS {
     }
 
     public StudentGradeDTO GetStudentGradeById(int id) {
-//        StudentGradeDAO StudentGradeDAO = new StudentGradeDAO();
         for (StudentGradeDTO s : listStudentGrade) {
             if (s.getEnrollmentID() == id)
                 return s;
