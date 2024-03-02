@@ -79,5 +79,16 @@ public class StudentGradeBUS {
         listStudentGrade = studentGradeDAO.getStudentGradesByStudentID(studentID); 
         return listStudentGrade; 
     }
+    
+    public ArrayList<StudentGradeDTO> getStudentGradesByCourseID(int courseID) {
+        ArrayList<StudentGradeDTO> listStudentGrade = new ArrayList<>(); 
+        StudentGradeDAO studentGradeDAO = new StudentGradeDAO(); 
+        listStudentGrade = studentGradeDAO.getStudentGradesByCourseID(courseID); 
+        return listStudentGrade; 
+    }
+    
+    
+    
+    
 
 }

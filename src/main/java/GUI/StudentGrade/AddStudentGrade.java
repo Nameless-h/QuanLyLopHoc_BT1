@@ -164,6 +164,10 @@ public class AddStudentGrade extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String grade_string = txtGrade1.getText();
+        if (grade_string.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập điểm.");
+            return;
+        }
         while(grade_string.isEmpty() || !grade_string.matches("-?\\d+(\\.\\d+)?")){
             JOptionPane.showMessageDialog(null, grade_string + " : Không phải là số");
             return;
@@ -190,8 +194,7 @@ public class AddStudentGrade extends javax.swing.JFrame {
             try {
                 stdb.AddStudentGrade(newStudentGrade);
                 setVisible(false);
-
-
+                fillTable();
             } catch (Exception e) {
                 e.getStackTrace();
             }

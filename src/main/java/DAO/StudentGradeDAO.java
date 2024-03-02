@@ -160,6 +160,27 @@ public class StudentGradeDAO {
     }
     return studentGrades; 
 }
+    
+    public ArrayList<StudentGradeDTO> getStudentGradesByCourseID(int courseID) {
+        ArrayList<StudentGradeDTO> studentGrades = new ArrayList<>();
+        String sql = "SELECT * FROM studentgrade WHERE courseID = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, courseID);
+            ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            StudentGradeDTO studentGrade = new StudentGradeDTO();
+            studentGrade.setEnrollmentID(rs.getInt("enrollmentID"));
+            studentGrade.setCourseID(rs.getInt("courseID"));
+            studentGrade.setGrade(rs.getFloat("grade"));
+            studentGrade.setStudentID(rs.getInt("studentID"));
+            studentGrades.add(studentGrade);
+        }
+    } catch (SQLException ex) {
+        CustomLogger.CustomLogger(StudentGradeDAO.class.getName(), ex.getMessage(), Level.SEVERE);
+    }
+    return studentGrades;   
+}
 
     
 //    public static void main(String[] args) {
