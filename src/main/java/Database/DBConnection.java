@@ -20,7 +20,7 @@ public class DBConnection {
 
     private String user = "root";
     private String password = "";
-    private String url = "jdbc:mySQL://localhost:3307/course_management";
+    private String url = "jdbc:mySQL://localhost:3306/course_management";
     private Connection conn = null;
 
 

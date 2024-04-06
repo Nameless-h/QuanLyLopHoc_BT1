@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class OnsiteCourseBUS {
+
     private ArrayList<OnsiteCourseDTO> listOnsitecourse;
 
     public OnsiteCourseBUS() {
@@ -27,8 +28,9 @@ public class OnsiteCourseBUS {
 
     public OnsiteCourseDTO GetOnsiteCourseById(int id) {
         for (OnsiteCourseDTO c : listOnsitecourse) {
-            if (c.getCourseID() == id)
+            if (c.getCourseID() == id) {
                 return c;
+            }
         }
         return null;
     }
@@ -54,17 +56,18 @@ public class OnsiteCourseBUS {
         }
         return false;
     }
-    public boolean validateData(OnsiteCourseDTO c) throws ParseException {
-    if (c.getLocation().isEmpty() || c.getCourse_time().isEmpty() || c.getDays().isEmpty()) {
-        return false;
-    }
 
-    try {
+    public boolean validateData(OnsiteCourseDTO c) throws ParseException {
+        if (c.getLocation().isEmpty() || c.getCourse_time().isEmpty() || c.getDays().isEmpty()) {
+            return false;
+        }
+
+        try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date parsedDate = dateFormat.parse(c.getCourse_time());
             return c.getCourse_time().equals(dateFormat.format(parsedDate));
         } catch (ParseException e) {
             return false;
         }
-}
+    }
 }
